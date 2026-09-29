@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>司会・奏楽 奉仕アプリ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root {
+  --bg: #f6f5f3;
+  --surface: #ffffff;
+  --ink: #2a2826;
+  --muted: #736e68;
+  --line: #e8e5e0;
+  --line-strong: #c4bfb8;
+  --accent: #d9480f;
+  --accent-ink: #ffffff;
+  --accent-soft: #fdeee3;
+  --toast: #2a2826;
+  --scrim: rgba(30, 26, 22, .45);
+  --font: "Zen Kaku Gothic New", "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #191817;
+    --surface: #232120;
+    --ink: #f2efea;
+    --muted: #a6a099;
+    --line: #35322f;
+    --line-strong: #5b5651;
+    --accent: #f08a3e;
+    --accent-ink: #1c1917;
+    --accent-soft: #3b2a1e;
+    --toast: #f2efea;
+    --scrim: rgba(0, 0, 0, .65);
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  padding-inline: 16px;
+  padding-block: 0 72px;
+}
+.wrap { max-width: 720px; margin-inline: auto; }
+button, textarea, input { font: inherit; color: inherit; }
+button:focus-visible, textarea:focus-visible, input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+p { margin: 0; }
+
+/* header */
+header {
+  margin-inline: -16px;
+  padding: 30px 16px 26px;
+  background: var(--surface);
+  border-top: 5px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.church { margin: 0; font-weight: 500; font-size: 14px; letter-spacing: .3em; color: var(--accent); }
+h1 { margin: 8px 0 0; font-weight: 500; font-size: 22px; letter-spacing: .18em; line-height: 1.4; white-space: nowrap; }
+
+.panel { display: flex; flex-direction: column; gap: 16px; padding-block: 24px 16px; }
+.panel[hidden], .status[hidden] { display: none; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px; }
+.label { margin: 0 0 4px; font-size: 12px; letter-spacing: .2em; color: var(--muted); font-weight: 500; }
+h2 { margin: 0 0 12px; font-size: 22px; font-weight: 700; letter-spacing: .04em; line-height: 1.4; }
+.muted { color: var(--muted); font-size: 15px; }
+
+/* notice */
+.notice { background: var(--accent-soft); border-color: transparent; border-left: 5px solid var(--accent); }
+.notice .stamp { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.notice .body { white-space: pre-wrap; font-size: 18px; }
+.notice-tools { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.notice textarea { min-height: 130px; margin-top: 4px; }
+.notice-edit { display: flex; flex-direction: column; gap: 10px; }
+.notice-edit .row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pass {
+  width: 100%; min-height: 52px; padding: 8px 14px;
+  border: 1.5px solid var(--line-strong); border-radius: 10px;
+  background: var(--surface); font-size: 18px;
+}
+
+/* buttons */
+.btn {
+  min-height: 52px; padding: 8px 22px;
+  border: 0; border-radius: 10px;
+  background: var(--accent); color: var(--accent-ink);
+  font-weight: 700; font-size: 17px; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line-strong); font-weight: 500; }
+.btn.small { min-height: 44px; font-size: 15px; padding-inline: 16px; }
+.btn[disabled] { opacity: .5; cursor: default; }
+textarea {
+  width: 100%; padding: 12px;
+  border: 1.5px solid var(--line-strong); border-radius: 10px;
+  background: var(--surface); resize: vertical; line-height: 1.6;
+}
+
+/* how-to */
+.howto { padding: 12px 14px; border-radius: 10px; background: var(--bg); margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+
+/* schedule */
+.sched { display: flex; flex-direction: column; }
+.sched-row {
+  display: grid;
+  grid-template-columns: 76px 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.sched-row.head { border-top: 0; padding-block: 4px; font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: .2em; }
+.sched-row .d { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 24px; line-height: 1.2; }
+.sched-row .d small { display: block; font-size: 12px; color: var(--muted); font-weight: 400; letter-spacing: .1em; }
+.slot {
+  width: 100%;
+  min-height: 60px; padding: 6px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px; font-weight: 700; line-height: 1.3;
+}
+.slot small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+.slot.set { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.slot.tbd { border: 1.5px dashed var(--line-strong); background: var(--bg); color: var(--muted); font-weight: 500; }
+
+/* roster */
+.roster-group + .roster-group { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.roster-group h3 { margin: 0; font-weight: 500; letter-spacing: .2em; }
+.names { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.name-chip { padding: 6px 16px; border-radius: 999px; background: var(--accent-soft); font-weight: 500; font-size: 18px; }
+
+/* 名前を選ぶシート */
+.sheet-wrap {
+  position: fixed; inset: 0; z-index: 30;
+  background: var(--scrim);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.sheet-wrap[hidden] { display: none; }
+.sheet {
+  width: 100%; max-width: 720px; max-height: 88%; overflow-y: auto;
+  background: var(--surface);
+  border-radius: 18px 18px 0 0;
+  padding: 22px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 10px;
+}
+.sheet h3 { margin: 0; font-size: 21px; font-weight: 700; line-height: 1.4; }
+.sheet .cur { color: var(--muted); font-size: 15px; }
+.opt {
+  min-height: 60px; padding: 8px 18px;
+  border: 1.5px solid var(--line); border-radius: 12px;
+  background: var(--surface); cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 20px; font-weight: 700; text-align: left;
+}
+.opt small { font-size: 14px; font-weight: 400; color: var(--muted); }
+.opt.current { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.opt.current small { color: var(--accent-ink); opacity: .85; }
+.opt.undo { border-color: var(--line-strong); justify-content: center; font-weight: 500; }
+.opt.close { border-style: dashed; border-color: var(--line-strong); color: var(--muted); justify-content: center; font-weight: 400; }
+
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  max-width: calc(100% - 32px);
+  padding: 14px 22px; border-radius: 12px;
+  background: var(--toast); color: var(--surface);
+  font-weight: 700; z-index: 40;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .18);
+}
+.toast[hidden] { display: none; }
+
+/* ページ切り替え */
+.tabs {
+  margin-inline: -16px;
+  padding-inline: 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tabs-inner { max-width: 720px; margin-inline: auto; display: grid; grid-template-columns: 1fr 1fr 1.2fr; }
+.tab {
+  min-height: 56px; padding: 6px 4px;
+  border: 0; border-bottom: 3px solid transparent;
+  background: transparent; color: var(--muted);
+  font-weight: 500; font-size: 17px; letter-spacing: .04em; cursor: pointer;
+}
+.tab[aria-selected="true"] { color: var(--ink); font-weight: 700; border-bottom-color: var(--accent); }
+
+/* 選曲ページ */
+.song-day { padding-block: 16px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.song-day.first { border-top: 0; padding-top: 4px; }
+.song-day-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 2px; }
+.song-day-head .pianist { margin-left: auto; }
+.done { padding: 3px 12px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 14px; font-weight: 700; letter-spacing: .05em; }
+.prog { padding: 3px 12px; border-radius: 999px; border: 1.5px dashed var(--line-strong); color: var(--muted); font-size: 14px; font-weight: 500; }
+.next { padding: 3px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); font-size: 14px; font-weight: 700; }
+/* 日曜一覧 */
+.ov-day { padding-block: 16px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.ov-day.first { border-top: 0; padding-top: 4px; }
+.ov-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-block: 4px; }
+.ov-roles .label { margin: 0 0 4px; }
+.pianist.full { display: flex; width: 100%; }
+.ov-song { display: flex; align-items: center; gap: 14px; padding: 4px 2px; font-size: 19px; font-weight: 700; line-height: 1.35; }
+.ov-song.none { color: var(--muted); font-weight: 500; }
+.ov-link { margin-left: 42px; }
+.song-day-head .d { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 24px; line-height: 1.2; }
+.song-day-head .d small { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; letter-spacing: .1em; }
+/* 奏楽の名前(担当表とつながる。押せない表示) */
+.pianist {
+  min-height: 44px; padding: 4px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center;
+  font-size: 20px; font-weight: 700; line-height: 1.3;
+}
+.pianist.set { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.pianist.tbd { border: 1.5px dashed var(--line-strong); background: var(--bg); color: var(--muted); font-weight: 500; }
+.urllink { align-self: flex-start; margin: -2px 0 2px 14px; padding: 6px 4px; font-size: 15px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.song-slot.none { color: var(--muted); font-weight: 500; }
+.opt.none-opt { justify-content: center; }
+.opt.newsong { border-color: var(--accent); justify-content: center; }
+.newtag { margin-left: auto; flex: none; padding: 1px 10px; border: 1.5px solid var(--line-strong); border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: .1em; }
+.zone { font-size: 12px; letter-spacing: .2em; color: var(--muted); font-weight: 500; margin-top: 4px; }
+.song-slot {
+  width: 100%; min-height: 58px; padding: 6px 14px;
+  border-radius: 10px; cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 19px; font-weight: 700; text-align: left; line-height: 1.35;
+}
+.no { flex: none; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--accent-soft); color: var(--accent); }
+.song-slot.set { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.song-slot.tbd { border: 1.5px dashed var(--line-strong); background: var(--bg); color: var(--muted); font-weight: 500; }
+/* 曲を選ぶ画面: 画面の高さをほぼ全部使い、曲の一覧(song-list)を一番広くする */
+.sheet.tall { height: 96vh; height: 96dvh; max-height: 96dvh; overflow: hidden; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)); gap: 6px; }
+.sheet-head { flex: none; display: flex; flex-direction: column; gap: 6px; }
+.sh-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sh-top h3 { font-size: 18px; }
+.x { min-height: 40px; padding: 0 8px; border: 0; background: transparent; color: var(--muted); font-size: 15px; font-weight: 500; cursor: pointer; }
+.search {
+  width: 100%; min-height: 42px; padding: 4px 12px;
+  border: 1.5px solid var(--line-strong); border-radius: 10px;
+  background: var(--surface); color: var(--ink); font-size: 16px;
+}
+.gyo-chips { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.gyo-chips::-webkit-scrollbar { display: none; }
+.gyo {
+  flex: none; min-height: 38px; padding: 2px 12px;
+  border: 1.5px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap;
+}
+.acts { display: flex; gap: 6px; }
+.act {
+  flex: 1; min-height: 40px; padding: 2px 8px;
+  border: 1.5px solid var(--line-strong); border-radius: 10px;
+  background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.act.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hint { margin: 0; font-size: 12px; line-height: 1.4; color: var(--muted); }
+.gyo[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.song-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-block: 4px; }
+.gyo-head { margin: 10px 0 2px; font-size: 13px; letter-spacing: .2em; color: var(--muted); font-weight: 500; }
+.song-opt {
+  flex: none; min-height: 46px; padding: 4px 12px;
+  border: 1.5px solid var(--line); border-radius: 10px;
+  background: var(--surface); color: var(--ink); cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 17px; font-weight: 500; text-align: left;
+}
+.song-opt small { font-size: 12px; color: var(--muted); font-weight: 400; flex: none; }
+.song-opt.current { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.song-opt.current small { color: var(--accent-ink); opacity: .85; }
+.sheet-foot { flex: none; display: flex; flex-direction: column; gap: 8px; }
+
+.status { padding: 48px 8px; text-align: center; color: var(--muted); }
+.status .btn { margin-top: 16px; }
+
+@media (max-width: 420px) {
+  h1 { font-size: 19px; letter-spacing: .12em; }
+  .sched-row { grid-template-columns: 62px 1fr 1fr; }
+  .slot { font-size: 18px; padding-inline: 4px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .slot, .opt, .btn { transition: background-color .12s, border-color .12s, color .12s; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="church">小松ベタニヤ福音教会</p>
+    <h1>司会・奏楽 奉仕アプリ</h1>
+  </header>
+
+  <nav class="tabs" aria-label="ページの切り替え">
+    <div class="tabs-inner" role="tablist">
+      <button class="tab" role="tab" id="tabSched" aria-selected="true" type="button">担当表</button>
+      <button class="tab" role="tab" id="tabSongs" aria-selected="false" type="button">選曲</button>
+      <button class="tab" role="tab" id="tabOver" aria-selected="false" type="button">奉仕</button>
+    </div>
+  </nav>
+
+  <div class="status" id="status" role="status">読み込んでいます…</div>
+
+  <main class="panel" id="pageSched" hidden>
+    <div class="card notice" id="noticeBox"></div>
+    <div id="months" style="display:contents"></div>
+    <div class="card" id="rosterBox"></div>
+  </main>
+
+  <main class="panel" id="pageSongs" hidden>
+    <div id="songMonths" style="display:contents"></div>
+  </main>
+
+  <main class="panel" id="pageOver" hidden>
+    <div id="overMonths" style="display:contents"></div>
+  </main>
+</div>
+
+<div class="sheet-wrap" id="sheetWrap" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" id="sheet"></div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  // データのやり取り先(Google Apps Scriptのウェブアプリ)。
+  // 画面(このファイル)はGitHub Pagesなど、どこに置いてもここへfetchで読み書きする。
+  var APP_URL = "https://script.google.com/macros/s/AKfycbyTiH8FG4jgC0o82LmzcmSA7tnEqnZfrfhngNBrvlNRC1uZqIIUf1JbySlyg6HVJT0/exec";
+
+  var ROLES = ["司会", "奏楽"];
+  var NONE = "なし";   // 「この枠は歌わない」の印(3曲・2曲の週のため)
+  var HYMN = "聖歌・讃美歌";
+  var GYO = ["あ行", "か行", "さ行", "た行", "な行", "は行", "ま行", "や行", "ら行", "わ行", "他", "英語", HYMN];
+  var DOW = "日";
+
+  var D = null;          // サーバーから受け取ったデータ
+  var P = {};            // id → 奉仕者
+  var SONGS = [];        // 曲一覧(並べ替え済み)
+  var SONGSET = {};      // 曲一覧にある曲名(ここにない曲名は「新曲」)
+  var page = "sched";
+
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+  var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+  var dkey = function (y, m, d) { return y + "-" + pad(m) + "-" + pad(d); };
+  var nm = function (id) { return P[id] ? P[id].name + "さん" : ""; };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = $("#toast");
+    t.textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.hidden = true; }, 3600);
+  }
+
+  /* Apps ScriptのJSON APIを呼ぶ({action, args}をtext/plainで送り、事前確認(preflight)を避ける) */
+  function run(fn, args, onOk, onFail) {
+    var fail = onFail || function (e) {
+      toast("うまくいきませんでした:" + (e && e.message ? String(e.message).replace(/^Error:\s*/, "") : "もう一度ためしてください"));
+      load(true);
+    };
+    fetch(APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: fn, args: args })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res && res.ok) onOk(res.data);
+        else fail({ message: res && res.error });
+      })
+      .catch(function (err) { fail({ message: err && err.message }); });
+  }
+
+  /* ---------- 日付まわり ---------- */
+  // 「これから来る最初の日曜日」の月を今月として表示する。
+  // 例: 9/28(月)なら10月と11月。10月最後の日曜(10/25)が過ぎたら11月と12月に変わる。
+  function base() {
+    var p = D.today.split("-");
+    var t = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    t.setDate(t.getDate() + (7 - t.getDay()) % 7);
+    return { y: t.getFullYear(), m: t.getMonth() + 1 };
+  }
+  function shownMonths() {
+    var b = base();
+    var n = b.m === 12 ? { y: b.y + 1, m: 1 } : { y: b.y, m: b.m + 1 };
+    return [b, n];
+  }
+  function sundays(y, m) {
+    var out = [];
+    for (var d = 1; d <= 31; d++) {
+      var t = new Date(y, m - 1, d);
+      if (t.getMonth() !== m - 1) break;
+      if (t.getDay() === 0) out.push(d);
+    }
+    return out;
+  }
+  function getSlot(y, m, d, r) { return ((D.sched[dkey(y, m, d)] || {})[r]) || ""; }
+
+  /* ---------- 読み込み ---------- */
+  var busy = false;
+  function load(quiet) {
+    if (busy) return;
+    busy = true;
+    fetch(APP_URL + "?action=data")
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error((res && res.error) || "読み込みに失敗しました");
+        busy = false;
+        var data = res.data;
+        D = data;
+        D.songUrls = D.songUrls || {};
+        P = {};
+        D.people.forEach(function (p) { P[p.id] = p; });
+        // 聖歌・讃美歌は行に入れず、ぜんぶ「聖歌・讃美歌」のグループにまとめる
+        D.songList.forEach(function (s) {
+          s.grp = (s.c === "聖歌・讃美歌" || s.c === "聖歌") ? HYMN : s.g;
+        });
+        SONGS = D.songList.slice().sort(function (a, b) {
+          var d = GYO.indexOf(a.grp) - GYO.indexOf(b.grp);
+          return d || a.t.localeCompare(b.t, "ja");
+        });
+        SONGSET = {};
+        SONGS.forEach(function (s) { s.k = kana(s.t); SONGSET[s.t] = true; });
+        $("#status").hidden = true;
+        var editing = $("#noticeInput");
+        if (!editing) renderNotice(false);
+        renderMonths();
+        renderSongs();
+        renderRoster();
+        showPage(page, true);
+      })
+      .catch(function () {
+        busy = false;
+        if (quiet && D) { toast("最新の状態を読み込めませんでした"); return; }
+        var s = $("#status");
+        s.hidden = false;
+        s.innerHTML = "読み込めませんでした。<br>電波のよいところで、もう一度ためしてください。<br>";
+        var b = document.createElement("button");
+        b.className = "btn"; b.type = "button"; b.textContent = "もう一度読み込む";
+        b.addEventListener("click", function () { s.textContent = "読み込んでいます…"; load(); });
+        s.appendChild(b);
+      });
+  }
+
+  function kana(s) {
+    return s.normalize("NFKC").toLowerCase()
+      .replace(/[ァ-ヶ]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); })
+      .replace(/\s+/g, "");
+  }
+
+  /* ---------- お知らせ(一番上) ---------- */
+  function renderNotice(editing) {
+    var box = $("#noticeBox");
+    if (editing) {
+      box.innerHTML = '<p class="label">お知らせ</p><div class="notice-edit">' +
+        '<label for="noticeInput" class="muted">お知らせの文を書いてください</label>' +
+        '<textarea id="noticeInput"></textarea>' +
+        '<div class="row"><button class="btn" type="button" id="noticeSave">お知らせを出す</button>' +
+        '<button class="btn ghost" type="button" id="noticeCancel">やめる</button></div></div>';
+      $("#noticeInput").value = D.notice.text;
+      $("#noticeInput").focus();
+      $("#noticeSave").addEventListener("click", function () {
+        var v = $("#noticeInput").value.trim();
+        if (!v) { toast("お知らせの文が空です"); return; }
+        var btn = $("#noticeSave");
+        btn.disabled = true;
+        run("saveNotice", [v], function (res) {
+          D.notice = res;
+          renderNotice(false);
+          toast("お知らせを出しました");
+        }, function (e) {
+          btn.disabled = false;
+          toast((e && e.message ? e.message.replace(/^Error:\s*/, "") : "うまくいきませんでした"));
+        });
+      });
+      $("#noticeCancel").addEventListener("click", function () { renderNotice(false); });
+      return;
+    }
+    box.innerHTML = '<p class="label">お知らせ</p><p class="stamp"></p><p class="body"></p>' +
+      '<div class="notice-tools"><button class="btn ghost small" type="button" id="noticeEdit">書きかえる</button></div>';
+    // 最初に入っていた「はじめのお知らせ」は表示しない(お知らせを出したあとの日付だけ表示)
+    var stampEl = box.querySelector(".stamp");
+    if (D.notice.stamp && D.notice.stamp !== "はじめのお知らせ") stampEl.textContent = D.notice.stamp;
+    else stampEl.hidden = true;
+    box.querySelector(".body").textContent = D.notice.text;
+    $("#noticeEdit").addEventListener("click", function () { renderNotice(true); });
+  }
+
+  /* ---------- 担当表 ---------- */
+  function renderMonths() {
+    var html = "";
+    shownMonths().forEach(function (mo, i) {
+      var y = mo.y, m = mo.m;
+      html += '<div class="card"><p class="label">' + (i === 0 ? "今月の奉仕" : "来月の奉仕") + "</p><h2>" + m + "月の担当</h2>";
+      if (i === 0) {
+        html += '<div class="howto"><p>「未定」を押すと、名前を選べます。まちがえたときは、名前を押して直せます。</p></div>';
+      }
+      html += '<div class="sched"><div class="sched-row head"><span>日曜日</span><span>司会</span><span>奏楽</span></div>';
+      sundays(y, m).forEach(function (d) {
+        html += '<div class="sched-row"><span class="d">' + m + "/" + d + "<small>日曜日</small></span>";
+        ROLES.forEach(function (r) {
+          var v = getSlot(y, m, d, r);
+          var lab = m + "月" + d + "日の" + r;
+          var at = ' data-y="' + y + '" data-m="' + m + '" data-d="' + d + '" data-r="' + r + '"';
+          html += v && P[v]
+            ? '<button type="button" class="slot set"' + at + ' aria-label="' + lab + "は" + esc(nm(v)) + '。押すと直せます">' + esc(nm(v)) + "</button>"
+            : '<button type="button" class="slot tbd"' + at + ' aria-label="' + lab + 'は未定。押すと名前を選べます">未定<small>押して選ぶ</small></button>';
+        });
+        html += "</div>";
+      });
+      html += "</div></div>";
+    });
+    $("#months").innerHTML = html;
+    $$("#months .slot").forEach(function (b) {
+      b.addEventListener("click", function () {
+        openSheet(Number(b.dataset.y), Number(b.dataset.m), Number(b.dataset.d), b.dataset.r, b);
+      });
+    });
+  }
+
+  /* ---------- いまの奉仕者(一番下) ---------- */
+  function renderRoster() {
+    var html = "<h2>奉仕チーム</h2>";
+    ROLES.concat(["PA"]).forEach(function (r) {
+      html += '<div class="roster-group"><h3 class="muted">' + r + '</h3><div class="names">' +
+        D.people.filter(function (p) { return p.role === r; }).map(function (p) {
+          return '<span class="name-chip">' + esc(p.full) + "</span>";
+        }).join("") + "</div></div>";
+    });
+    $("#rosterBox").innerHTML = html;
+  }
+
+  /* ---------- 名前を選ぶシート ---------- */
+  var lastFocus = null;
+  function openSheet(y, m, d, r, opener) {
+    lastFocus = opener;
+    var cur = getSlot(y, m, d, r);
+    var html = '<h3 id="sheetTitle">' + m + "/" + d + "(" + DOW + ")の" + r + "は、だれですか?</h3>";
+    html += '<p class="cur">' + (cur && P[cur] ? "いまは " + esc(nm(cur)) + " です。変えるときは、下から選んでください。" : "いまは「未定」です。自分の名前を押してください。") + "</p>";
+    D.people.filter(function (p) { return p.role === r; }).forEach(function (p) {
+      html += '<button type="button" class="opt' + (p.id === cur ? " current" : "") + '" data-id="' + esc(p.id) + '">' +
+        "<span>" + (p.id === cur ? "✓ " : "") + esc(nm(p.id)) + "</span>" +
+        (p.id === cur ? "<small>いまの担当</small>" : "") + "</button>";
+    });
+    if (cur) html += '<button type="button" class="opt undo" data-id="">未定にもどす</button>';
+    html += '<button type="button" class="opt close" data-close="1">とじる</button>';
+    var sh = $("#sheet");
+    sh.className = "sheet";
+    sh.innerHTML = html;
+    $("#sheetWrap").hidden = false;
+    sh.scrollTop = 0;
+    $$("#sheet .opt").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.dataset.close) { closeSheet(); return; }
+        assign(y, m, d, r, b.dataset.id);
+      });
+    });
+    var first = sh.querySelector(".opt");
+    if (first) first.focus();
+  }
+  function closeSheet() {
+    $("#sheetWrap").hidden = true;
+    if (lastFocus && document.body.contains(lastFocus)) lastFocus.focus();
+  }
+  $("#sheetWrap").addEventListener("click", function (e) { if (e.target === this) closeSheet(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !$("#sheetWrap").hidden) closeSheet();
+  });
+
+  function assign(y, m, d, r, id) {
+    var k = dkey(y, m, d);
+    var before = getSlot(y, m, d, r);
+    if (id === before) { closeSheet(); return; }
+    D.sched[k] = D.sched[k] || {};
+    if (id) D.sched[k][r] = id; else delete D.sched[k][r];
+    closeSheet();
+    renderMonths();
+    renderSongs();
+    var lab = m + "/" + d + "の" + r;
+    run("setSlot", [k, r, id], function () {
+      toast(id ? lab + "を " + nm(id) + " にしました" : lab + "を未定にもどしました");
+    });
+  }
+
+  /* ---------- 選曲 ---------- */
+  function renderSongs() {
+    var html = "";
+    shownMonths().forEach(function (mo, i) {
+      var y = mo.y, m = mo.m;
+      html += '<div class="card"><p class="label">' + (i === 0 ? "今月の賛美" : "来月の賛美") + "</p><h2>" + m + "月の賛美</h2>";
+      if (i === 0) {
+        html += '<div class="howto"><p><b>曲を押すと曲名を選べます。</b></p>' +
+          '<p class="muted">曲をもう一度押すと選び直せます。</p>' +
+          '<p class="muted">リストにない曲は「新曲」から名前を書き込めます。</p></div>';
+      }
+      sundays(y, m).forEach(function (d, idx) {
+        var arr = D.songs[dkey(y, m, d)] || [];
+        var pl = getSlot(y, m, d, "奏楽");
+        html += '<div class="song-day' + (idx === 0 && i > 0 ? " first" : "") + '"><div class="song-day-head"><span class="d">' + m + "/" + d + "<small>日曜日</small></span>" + badge(arr) +
+          (pl && P[pl]
+            ? '<div class="pianist set"><span class="sr-only">奏楽 </span>' + esc(nm(pl)) + "</div>"
+            : '<div class="pianist tbd"><span class="sr-only">奏楽 </span>未定</div>') + "</div>";
+        for (var n = 0; n < 4; n++) {
+          if (n === 0) html += '<p class="zone">礼拝のはじめ</p>';
+          if (n === 2) html += '<p class="zone">「賛美と献金」のあと</p>';
+          var t = arr[n];
+          html += '<button type="button" class="song-slot ' + (t ? "set" : "tbd") + (t === NONE ? " none" : "") + '" data-y="' + y + '" data-m="' + m + '" data-d="' + d + '" data-n="' + n +
+            '" aria-label="' + m + "月" + d + "日の" + (n + 1) + "曲目:" + (t ? esc(t) : "未選択") + '"><span class="no">' + (n + 1) +
+            '</span><span>' + (t ? esc(t) : "曲を選ぶ") + "</span>" +
+            (t && t !== NONE && !SONGSET[t] ? '<small class="newtag">新曲</small>' : "") + "</button>";
+          var u = ((D.songUrls[dkey(y, m, d)] || [])[n]) || "";
+          if (t && u && /^https?:\/\/\S+$/.test(u)) {
+            html += '<a class="urllink" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">▶ この新曲を聞く(YouTubeなど)</a>';
+          }
+        }
+        html += "</div>";
+      });
+      html += "</div>";
+    });
+    $("#songMonths").innerHTML = html;
+    $$("#songMonths .song-slot").forEach(function (b) {
+      b.addEventListener("click", function () {
+        openSongSheet(Number(b.dataset.y), Number(b.dataset.m), Number(b.dataset.d), Number(b.dataset.n), b);
+      });
+    });
+    renderOverview();
+  }
+
+  /* 4つの枠が全部決まる(曲か「なし」)と、その日曜の選曲は完了 */
+  function decided(arr) {
+    var c = 0;
+    for (var i = 0; i < 4; i++) if (arr && arr[i]) c++;
+    return c;
+  }
+  function badge(arr) {
+    var c = decided(arr);
+    return c === 4
+      ? '<span class="done">✓ 選曲完了</span>'
+      : '<span class="prog">選曲中 ' + c + "/4</span>";
+  }
+  function nextSundayKey() {
+    var p = D.today.split("-");
+    var t = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    t.setDate(t.getDate() + (7 - t.getDay()) % 7);
+    return dkey(t.getFullYear(), t.getMonth() + 1, t.getDate());
+  }
+
+  /* ---------- 日曜一覧(司会・奏楽・選曲を、日曜ごとに1か所で見る) ---------- */
+  function ovRole(label, id) {
+    return '<div><p class="label">' + label + "</p>" +
+      (id && P[id]
+        ? '<div class="pianist set full">' + esc(nm(id)) + "</div>"
+        : '<div class="pianist tbd full">未定</div>') + "</div>";
+  }
+  function renderOverview() {
+    var nk = nextSundayKey(), html = "";
+    {
+      var pp = nk.split("-"), y = Number(pp[0]), m = Number(pp[1]), d = Number(pp[2]);
+      var k = nk, arr = D.songs[k] || [], urls = D.songUrls[k] || [];
+      var ttl = m + "/" + d + "奉仕";
+      $("#tabOver").textContent = ttl;
+      html += '<div class="card"><p class="label">今度の日曜</p><h2>' + ttl + "</h2>" +
+        '<div class="ov-day first"><div class="song-day-head">' + badge(arr) + "</div>" +
+          '<div class="ov-roles">' + ovRole("司会", getSlot(y, m, d, "司会")) + ovRole("奏楽", getSlot(y, m, d, "奏楽")) + "</div>";
+        for (var n = 0; n < 4; n++) {
+          if (n === 0) html += '<p class="zone">礼拝のはじめ</p>';
+          if (n === 2) html += '<p class="zone">「賛美と献金」のあと</p>';
+          var t = arr[n], u = urls[n] || "";
+          html += '<div class="ov-song' + (t === NONE || !t ? " none" : "") + '"><span class="no">' + (n + 1) + '</span><span class="tt">' +
+            (t ? esc(t) : "まだ選んでいません") + "</span>" +
+            (t && t !== NONE && !SONGSET[t] ? '<small class="newtag">新曲</small>' : "") + "</div>";
+          if (t && t !== NONE && u && /^https?:\/\/\S+$/.test(u)) {
+            html += '<a class="urllink ov-link" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">▶ この新曲を聞く(YouTubeなど)</a>';
+          }
+        }
+        html += "</div></div>";
+    }
+    $("#overMonths").innerHTML = html;
+  }
+
+  function openSongSheet(y, m, d, n, opener) {
+    lastFocus = opener;
+    var k = dkey(y, m, d);
+    var cur = (D.songs[k] || [])[n] || "";
+    var filt = { q: "", g: "" };
+    var sh = $("#sheet");
+    sh.className = "sheet tall";
+    // スマホでも曲の一覧が広く見えるよう、上の部品を小さくまとめ、下の部品はなくした
+    sh.innerHTML = '<div class="sheet-head"><div class="sh-top"><h3 id="sheetTitle">' + m + "/" + d + "(" + DOW + ")の" + (n + 1) + "曲目</h3>" +
+      '<button type="button" class="x" id="songClose" aria-label="とじる">とじる ✕</button></div>' +
+      '<input type="search" class="search" id="songQ" placeholder="曲名の一部(ひらがな・カタカナ)" aria-label="曲名をさがす" autocomplete="off">' +
+      '<div class="gyo-chips" id="gyoChips"></div>' +
+      '<div class="acts"><button type="button" class="act' + (cur === NONE ? " on" : "") + '" id="songNone">' + (cur === NONE ? "✓ " : "") + 'なし</button>' +
+      '<button type="button" class="act new" id="songNew">新曲</button>' +
+      (cur ? '<button type="button" class="act" id="songClear">曲をはずす</button>' : "") + "</div>" +
+      '<p class="hint">曲数を減らすときは、「なし」を選んでください。新しい曲は「新曲」から名前を書き込めます。</p></div>' +
+      '<div class="song-list" id="songList"></div>';
+    $("#sheetWrap").hidden = false;
+
+    var groups = [""].concat(GYO.filter(function (g) { return SONGS.some(function (s) { return s.grp === g; }); }));
+    function draw() {
+      $("#gyoChips").innerHTML = groups.map(function (g) {
+        return '<button type="button" class="gyo" data-g="' + g + '" aria-pressed="' + (filt.g === g) + '">' + (g || "ぜんぶ") + "</button>";
+      }).join("");
+      $$("#gyoChips .gyo").forEach(function (b) {
+        b.addEventListener("click", function () { filt.g = b.dataset.g; draw(); $("#songList").scrollTop = 0; });
+      });
+      var q = kana(filt.q), last = "", cnt = 0, html = "";
+      SONGS.forEach(function (s, idx) {
+        if (filt.g && s.grp !== filt.g) return;
+        if (q && s.k.indexOf(q) < 0) return;
+        cnt++;
+        if (!filt.g && !q && s.grp !== last) { html += '<p class="gyo-head">' + esc(s.grp) + "</p>"; last = s.grp; }
+        html += '<button type="button" class="song-opt' + (s.t === cur ? " current" : "") + '" data-i="' + idx + '"><span>' +
+          (s.t === cur ? "✓ " : "") + esc(s.t) + "</span>" + (s.c !== "賛美" ? "<small>" + esc(s.c) + "</small>" : "") + "</button>";
+      });
+      if (!cnt) html = '<p class="muted" style="padding:16px 4px">見つかりません。ひらがな・カタカナで、曲名の一部を入れてみてください。</p>';
+      $("#songList").innerHTML = html;
+      $$("#songList .song-opt").forEach(function (b) {
+        b.addEventListener("click", function () { setSong(y, m, d, n, SONGS[Number(b.dataset.i)].t); });
+      });
+    }
+    draw();
+    $("#songQ").addEventListener("input", function (e) { filt.q = e.target.value; draw(); });
+    $("#songClose").addEventListener("click", closeSheet);
+    var clr = $("#songClear");
+    if (clr) clr.addEventListener("click", function () { setSong(y, m, d, n, ""); });
+    $("#songNew").addEventListener("click", function () { openNewSongForm(y, m, d, n, cur); });
+    $("#songNone").addEventListener("click", function () { setSong(y, m, d, n, NONE); });
+  }
+
+  /* 新曲: 曲名を書き込む */
+  function openNewSongForm(y, m, d, n, cur) {
+    var sh = $("#sheet");
+    sh.className = "sheet";
+    sh.innerHTML = '<h3 id="sheetTitle">' + m + "/" + d + "(" + DOW + ")の" + (n + 1) + "曲目:新曲</h3>" +
+      '<p class="cur">新しい曲の名前を書いてください。</p>' +
+      '<label for="newTitle" class="muted">曲名</label>' +
+      '<input type="text" class="pass" id="newTitle" maxlength="60" placeholder="曲名" autocomplete="off" spellcheck="false">' +
+      '<label for="newUrl" class="muted">新曲のYouTubeなどのURLを貼ってください</label>' +
+      '<input type="url" class="pass" id="newUrl" maxlength="500" placeholder="https://" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+      '<button type="button" class="opt current" id="newSave" style="justify-content:center">この曲にする</button>' +
+      '<button type="button" class="opt close" id="newBack">もどる</button>';
+    $("#newTitle").focus();
+    $("#newBack").addEventListener("click", function () { openSongSheet(y, m, d, n, lastFocus); });
+    $("#newSave").addEventListener("click", function () {
+      var title = $("#newTitle").value.trim().replace(/\s+/g, " ");
+      var url = $("#newUrl").value.trim();
+      if (!title) { toast("曲名を書いてください"); return; }
+      if (url && !/^https?:\/\/\S+$/.test(url)) { toast("URLは http:// か https:// で始まる形で貼ってください"); return; }
+      var btn = $("#newSave");
+      btn.disabled = true;
+      var k = dkey(y, m, d);
+      run("setSong", [k, n + 1, title, url], function () {
+        var arr = D.songs[k] = D.songs[k] || ["", "", "", ""];
+        arr[n] = title;
+        (D.songUrls[k] = D.songUrls[k] || ["", "", "", ""])[n] = url;
+        closeSheet();
+        renderSongs();
+        toast(m + "/" + d + "の" + (n + 1) + "曲目を「" + title + "」(新曲)にしました");
+      }, function (e) {
+        btn.disabled = false;
+        toast(e && e.message ? e.message.replace(/^Error:\s*/, "") : "うまくいきませんでした");
+      });
+    });
+  }
+
+  function setSong(y, m, d, n, title) {
+    var k = dkey(y, m, d);
+    var arr = D.songs[k] = D.songs[k] || ["", "", "", ""];
+    if (arr[n] === title) { closeSheet(); return; }
+    arr[n] = title;
+    if (D.songUrls[k]) D.songUrls[k][n] = "";
+    closeSheet();
+    renderSongs();
+    var lab = m + "/" + d + "の" + (n + 1) + "曲目";
+    run("setSong", [k, n + 1, title], function () {
+      toast(title ? lab + "を「" + title + "」にしました" : lab + "をはずしました");
+    });
+  }
+
+  /* ---------- ページの切り替え ---------- */
+  function showPage(name, keepScroll) {
+    page = name;
+    var ready = !!D;
+    $("#pageSched").hidden = !ready || name !== "sched";
+    $("#pageSongs").hidden = !ready || name !== "songs";
+    $("#pageOver").hidden = !ready || name !== "over";
+    $("#tabSched").setAttribute("aria-selected", String(name === "sched"));
+    $("#tabSongs").setAttribute("aria-selected", String(name === "songs"));
+    $("#tabOver").setAttribute("aria-selected", String(name === "over"));
+    if (!keepScroll) window.scrollTo({ top: 0 });
+  }
+  $("#tabSched").addEventListener("click", function () { showPage("sched"); });
+  $("#tabSongs").addEventListener("click", function () { showPage("songs"); });
+  $("#tabOver").addEventListener("click", function () { showPage("over"); });
+
+  /* ---------- 他の人の入力を取りこむ ---------- */
+  setInterval(function () {
+    if (document.hidden || !D || !$("#sheetWrap").hidden || $("#noticeInput")) return;
+    load(true);
+  }, 45000);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && D && $("#sheetWrap").hidden && !$("#noticeInput")) load(true);
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
