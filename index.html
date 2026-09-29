@@ -339,7 +339,7 @@ textarea {
 <script>
 (function () {
   // データのやり取り先(Google Apps Scriptのウェブアプリ)。
-  // 画面(このファイル)はGitHub Pagesなど、どこに置いてもここへfetchで読み書きする。
+  // 画面(このファイル)はGitHub Pagesなど、どこに置いてもここへJSONPで読み書きする。
   var APP_URL = "https://script.google.com/macros/s/AKfycbyTiH8FG4jgC0o82LmzcmSA7tnEqnZfrfhngNBrvlNRC1uZqIIUf1JbySlyg6HVJT0/exec";
 
   var ROLES = ["司会", "奏楽"];
@@ -374,24 +374,38 @@ textarea {
     toastTimer = setTimeout(function () { t.hidden = true; }, 3600);
   }
 
-  /* Apps ScriptのJSON APIを呼ぶ({action, args}をtext/plainで送り、事前確認(preflight)を避ける) */
-  function run(fn, args, onOk, onFail) {
+  /* Apps ScriptはCORS用ヘッダを返せないため、fetchでは他ドメイン(GitHub Pages)から呼べない。
+   * <script>タグでの読み込みはCORSの対象外なので、JSONP(?callback=...)で読み書きする。 */
+  var jsonpN = 0;
+  function jsonp(action, args, onOk, onFail) {
     var fail = onFail || function (e) {
       toast("うまくいきませんでした:" + (e && e.message ? String(e.message).replace(/^Error:\s*/, "") : "もう一度ためしてください"));
       load(true);
     };
-    fetch(APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: fn, args: args })
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (res) {
-        if (res && res.ok) onOk(res.data);
-        else fail({ message: res && res.error });
-      })
-      .catch(function (err) { fail({ message: err && err.message }); });
+    var name = "jsonp_cb_" + (jsonpN++) + "_" + Date.now();
+    var script = document.createElement("script");
+    var done = false;
+    function cleanup() {
+      if (done) return;
+      done = true;
+      delete window[name];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[name] = function (res) {
+      cleanup();
+      if (res && res.ok) onOk(res.data);
+      else fail({ message: res && res.error });
+    };
+    script.onerror = function () {
+      cleanup();
+      fail({ message: "通信に失敗しました" });
+    };
+    script.src = APP_URL + "?action=" + encodeURIComponent(action) +
+      "&args=" + encodeURIComponent(JSON.stringify(args || [])) +
+      "&callback=" + name;
+    document.body.appendChild(script);
   }
+  function run(fn, args, onOk, onFail) { jsonp(fn, args, onOk, onFail); }
 
   /* ---------- 日付まわり ---------- */
   // 「これから来る最初の日曜日」の月を今月として表示する。
@@ -423,12 +437,8 @@ textarea {
   function load(quiet) {
     if (busy) return;
     busy = true;
-    fetch(APP_URL + "?action=data")
-      .then(function (r) { return r.json(); })
-      .then(function (res) {
-        if (!res || !res.ok) throw new Error((res && res.error) || "読み込みに失敗しました");
+    jsonp("data", [], function (data) {
         busy = false;
-        var data = res.data;
         D = data;
         D.songUrls = D.songUrls || {};
         P = {};
@@ -450,8 +460,7 @@ textarea {
         renderSongs();
         renderRoster();
         showPage(page, true);
-      })
-      .catch(function () {
+      }, function () {
         busy = false;
         if (quiet && D) { toast("最新の状態を読み込めませんでした"); return; }
         var s = $("#status");
@@ -476,7 +485,7 @@ textarea {
     if (editing) {
       box.innerHTML = '<p class="label">お知らせ</p><div class="notice-edit">' +
         '<label for="noticeInput" class="muted">お知らせの文を書いてください</label>' +
-        '<textarea id="noticeInput"></textarea>' +
+        '<textarea id="noticeInput" maxlength="500"></textarea>' +
         '<div class="row"><button class="btn" type="button" id="noticeSave">お知らせを出す</button>' +
         '<button class="btn ghost" type="button" id="noticeCancel">やめる</button></div></div>';
       $("#noticeInput").value = D.notice.text;
