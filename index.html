@@ -242,8 +242,7 @@ textarea {
   background: var(--surface); color: var(--ink); font-size: 16px;
 }
 .gyo-chips { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
-.gyo-chips::-webkit-scrollbar { display: none; }
-.gyo {
+.gyo-chips::-webkit-scrollbar { display: none; }.gyo {
   flex: none; min-height: 38px; padding: 2px 12px;
   border: 1.5px solid var(--line); border-radius: 999px;
   background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap;
@@ -256,6 +255,12 @@ textarea {
 }
 .act.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .hint { margin: 0; font-size: 12px; line-height: 1.4; color: var(--muted); }
+.cat-seg { display: flex; border: 1.5px solid var(--accent); border-radius: 10px; overflow: hidden; }.seg {
+  flex: 1; min-height: 42px; padding: 2px 8px; border: 0;
+  background: var(--surface); color: var(--ink); font-size: 16px; font-weight: 700; cursor: pointer;
+}
+.seg + .seg { border-left: 1.5px solid var(--accent); }
+.seg[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .gyo[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 .song-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-block: 4px; }
 .gyo-head { margin: 10px 0 2px; font-size: 13px; letter-spacing: .2em; color: var(--muted); font-weight: 500; }
@@ -330,8 +335,15 @@ textarea {
 
   var ROLES = ["司会", "奏楽"];
   var NONE = "なし";   // 「この枠は歌わない」の印(3曲・2曲の週のため)
-  var HYMN = "聖歌・讃美歌";
-  var GYO = ["あ行", "か行", "さ行", "た行", "な行", "は行", "ま行", "や行", "ら行", "わ行", "他", "英語", HYMN];
+  // 曲は「ワーシップ」と「聖歌・讃美歌」の2つに分け、それぞれの中を行で分ける
+  var WORSHIP = "ワーシップ", HYMN = "聖歌・讃美歌";
+  var CATS = [WORSHIP, HYMN];
+  var GYO = ["あ行", "か行", "さ行", "た行", "な行", "は行", "ま行", "や行", "ら行", "わ行", "他", "英語"];
+  var ROWS = ["あいうえおぁぃぅぇぉゔ", "かきくけこがぎぐげご", "さしすせそざじずぜぞ", "たちつてとだぢづでどっ", "なにぬねの",
+    "はひふへほばびぶべぼぱぴぷぺぽ", "まみむめも", "やゆよゃゅょ", "らりるれろ", "わをん"];
+  // 漢字で始まる聖歌・讃美歌の読み(番号を取ったあとの書き出し → 行)
+  var HYMN_READ = { "十字架": "さ", "輝く": "か", "荒野": "あ", "望み": "な", "牧人": "ま", "雨を": "あ", "主が": "さ",
+    "救い主": "さ", "悩む": "な", "敬老": "か", "小松": "か", "主われ": "さ" };
   var DOW = "日";
 
   var D = null;          // サーバーから受け取ったデータ
@@ -429,13 +441,16 @@ textarea {
         D.songUrls = D.songUrls || {};
         P = {};
         D.people.forEach(function (p) { P[p.id] = p; });
-        // 聖歌・讃美歌は行に入れず、ぜんぶ「聖歌・讃美歌」のグループにまとめる
+        // 聖歌・讃美歌とワーシップ(それ以外)に分け、どちらも行で分ける
         D.songList.forEach(function (s) {
-          s.grp = (s.c === "聖歌・讃美歌" || s.c === "聖歌") ? HYMN : s.g;
+          s.cat = (s.c === "聖歌・讃美歌" || s.c === "聖歌") ? HYMN : WORSHIP;
+          s.sk = s.cat === HYMN ? hymnBody(s.t) : s.t;
+          s.grp = s.cat === HYMN ? hymnRow(s) : s.g;
+          if (GYO.indexOf(s.grp) < 0) s.grp = "他";
         });
         SONGS = D.songList.slice().sort(function (a, b) {
-          var d = GYO.indexOf(a.grp) - GYO.indexOf(b.grp);
-          return d || a.t.localeCompare(b.t, "ja");
+          var d = CATS.indexOf(a.cat) - CATS.indexOf(b.cat) || GYO.indexOf(a.grp) - GYO.indexOf(b.grp);
+          return d || a.sk.localeCompare(b.sk, "ja");
         });
         SONGSET = {};
         SONGS.forEach(function (s) { s.k = kana(s.t); SONGSET[s.t] = true; });
@@ -457,6 +472,24 @@ textarea {
         b.addEventListener("click", function () { s.textContent = "読み込んでいます…"; load(); });
         s.appendChild(b);
       });
+  }
+
+  // 聖歌・讃美歌の曲名から「聖歌123」「讃美歌312番」「(396)」などの番号を取り、曲名の書き出しだけにする
+  function hymnBody(t) {
+    return t.normalize("NFKC")
+      .replace(/子ども讃美歌\s*\d+番?/g, "")
+      .replace(/(聖歌|讃美歌)\s*\d*\s*番?/g, "")
+      .replace(/[()()]?\s*\d+\s*[)()]?/g, "")
+      .replace(/^[\s　・]+/, "").trim();
+  }
+  // 聖歌・讃美歌の行:一覧に行が入っていればそれを使い、なければ読みから決める
+  function hymnRow(s) {
+    if (/^[あかさたなはまやらわ]行$/.test(s.g)) return s.g;
+    var b = hymnBody(s.t);
+    for (var key in HYMN_READ) if (b.indexOf(key) === 0) return HYMN_READ[key] + "行";
+    var c = kana(b.charAt(0));
+    for (var i = 0; i < ROWS.length; i++) if (ROWS[i].indexOf(c) >= 0) return ROWS[i].charAt(0) + "行";
+    return "他";
   }
 
   function kana(s) {
@@ -699,12 +732,15 @@ textarea {
     lastFocus = opener;
     var k = dkey(y, m, d);
     var cur = (D.songs[k] || [])[n] || "";
-    var filt = { q: "", g: "" };
+    // いま選んである曲が聖歌・讃美歌なら、そちらを開いた状態にする
+    var curSong = SONGS.filter(function (s) { return s.t === cur; })[0];
+    var filt = { q: "", cat: curSong ? curSong.cat : WORSHIP, g: "" };
     var sh = $("#sheet");
     sh.className = "sheet tall";
     // スマホでも曲の一覧が広く見えるよう、上の部品を小さくまとめ、下の部品はなくした
     sh.innerHTML = '<div class="sheet-head"><div class="sh-top"><h3 id="sheetTitle">' + m + "/" + d + "(" + DOW + ")の" + (n + 1) + "曲目</h3>" +
       '<button type="button" class="x" id="songClose" aria-label="とじる">とじる ✕</button></div>' +
+      '<div class="cat-seg" id="catSeg"></div>' +
       '<input type="search" class="search" id="songQ" placeholder="曲名の一部(ひらがな・カタカナ)" aria-label="曲名をさがす" autocomplete="off">' +
       '<div class="gyo-chips" id="gyoChips"></div>' +
       '<div class="acts"><button type="button" class="act' + (cur === NONE ? " on" : "") + '" id="songNone">' + (cur === NONE ? "✓ " : "") + 'なし</button>' +
@@ -714,22 +750,36 @@ textarea {
       '<div class="song-list" id="songList"></div>';
     $("#sheetWrap").hidden = false;
 
-    var groups = [""].concat(GYO.filter(function (g) { return SONGS.some(function (s) { return s.grp === g; }); }));
     function draw() {
+      // 上の切り替えボタンで「ワーシップ」「聖歌・讃美歌」を行き来し、その中を行で絞る
+      var groups = [""].concat(GYO.filter(function (g) {
+        return SONGS.some(function (s) { return s.cat === filt.cat && s.grp === g; });
+      }));
+      $("#catSeg").innerHTML = CATS.map(function (c) {
+        return '<button type="button" class="seg" data-c="' + c + '" aria-pressed="' + (filt.cat === c) + '">' + esc(c) + "</button>";
+      }).join("");
+      $$("#catSeg .seg").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (filt.cat === b.dataset.c && !filt.q) return;
+          filt.cat = b.dataset.c; filt.g = ""; filt.q = ""; $("#songQ").value = ""; draw(); $("#songList").scrollTop = 0;
+        });
+      });
       $("#gyoChips").innerHTML = groups.map(function (g) {
         return '<button type="button" class="gyo" data-g="' + g + '" aria-pressed="' + (filt.g === g) + '">' + (g || "ぜんぶ") + "</button>";
       }).join("");
       $$("#gyoChips .gyo").forEach(function (b) {
-        b.addEventListener("click", function () { filt.g = b.dataset.g; draw(); $("#songList").scrollTop = 0; });
+        b.addEventListener("click", function () { filt.g = b.dataset.g; filt.q = ""; $("#songQ").value = ""; draw(); $("#songList").scrollTop = 0; });
       });
+      // 曲名で探すときは、ワーシップと聖歌・讃美歌の両方から探す
       var q = kana(filt.q), last = "", cnt = 0, html = "";
       SONGS.forEach(function (s, idx) {
-        if (filt.g && s.grp !== filt.g) return;
-        if (q && s.k.indexOf(q) < 0) return;
+        if (q) { if (s.k.indexOf(q) < 0) return; }
+        else if (s.cat !== filt.cat || (filt.g && s.grp !== filt.g)) return;
         cnt++;
-        if (!filt.g && !q && s.grp !== last) { html += '<p class="gyo-head">' + esc(s.grp) + "</p>"; last = s.grp; }
+        var head = q ? s.cat : s.grp;
+        if ((q || !filt.g) && head !== last) { html += '<p class="gyo-head">' + esc(head) + "</p>"; last = head; }
         html += '<button type="button" class="song-opt' + (s.t === cur ? " current" : "") + '" data-i="' + idx + '"><span>' +
-          (s.t === cur ? "✓ " : "") + esc(s.t) + "</span>" + (s.c !== "賛美" ? "<small>" + esc(s.c) + "</small>" : "") + "</button>";
+          (s.t === cur ? "✓ " : "") + esc(s.t) + "</span>" + (s.c !== "賛美" && s.cat !== HYMN ? "<small>" + esc(s.c) + "</small>" : "") + "</button>";
       });
       if (!cnt) html = '<p class="muted" style="padding:16px 4px">見つかりません。ひらがな・カタカナで、曲名の一部を入れてみてください。</p>';
       $("#songList").innerHTML = html;
