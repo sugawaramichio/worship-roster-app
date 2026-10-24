@@ -590,7 +590,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
         s = s.replace(/[ぁ-ゖ]/g, function (ch) { return String.fromCharCode(ch.charCodeAt(0) + 0x60); });
         s = s.replace(/[a-z'\-]+/g, romaji);
         s = s.replace(/(.)ー/g, function (m, p) { return p + vowelOf(p); });
-        return s.replace(/オウ/g, "オオ");
+        return s.replace(/([オコソトノホモヨロヲゴゾドボポョ])ウ/g, "$1オ");
       }
       function show(html) { body.innerHTML = html; body.hidden = false; lock.hidden = true; }
       form.addEventListener("submit", function (e) {
