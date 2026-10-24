@@ -253,6 +253,8 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .hcard .cover { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 8px; row-gap: 2px; align-content: center; align-items: end; min-height: 96px; }
 .hcard .num, .hcard .num.one { grid-column: 2; font-size: min(0.9em, 3.3vw); line-height: 1.3; white-space: normal; word-break: auto-phrase; }
 .hcard .catch { grid-column: 2; margin-top: 0; align-self: start; line-height: 1.4; }
+.sp[hidden], .note[hidden] { display: none !important; }
+#hbody h3:first-child { margin-top: 14px; }
 /* 窓は全部おなじ大きさ(小さい窓)で2列にそろえる */
 .cards.home .c1, .cards.home .wide { grid-column: auto; }
 .c1.hcard .cover, .wide .cover { flex-direction: column; align-items: stretch; }
@@ -327,7 +329,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
       <span class="open"><span></span></span>
     </a>
     <button type="button" class="card hcard c3" data-go="hitsujikai">
-      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16C3.8 15.6 3.2 12.4 5.2 11.2C4.8 8.6 8 7.2 9.6 8.8C10.8 6.6 14.4 6.6 15.4 9C18 8.4 19.6 11.2 18 13C19 14.8 17.6 16.4 16 16z"/><path d="M8 16v3.5M14 16v3.5"/><ellipse cx="20" cy="13" rx="2.2" ry="2.8"/><circle cx="20.6" cy="12.2" r=".35"/>
+      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9.2C4.8 8.6 5.2 5.4 7.8 5.5C8.2 3.6 10.8 3 12 4.6C13.2 3 15.8 3.6 16.2 5.5C18.8 5.4 19.2 8.6 17 9.2"/><path d="M8 9.2C7.8 13 8.2 16 9.6 17.8C10.6 19 13.4 19 14.4 17.8C15.8 16 16.2 13 16 9.2"/><path d="M7.9 11.2C5.8 10.4 3.9 11 3.6 12.3C5 13.4 6.6 13.3 7.9 12.7"/><path d="M16.1 11.2C18.2 10.4 20.1 11 20.4 12.3C19 13.4 17.4 13.3 16.1 12.7"/><circle cx="10.3" cy="12.2" r=".5"/><circle cx="13.7" cy="12.2" r=".5"/><path d="M11 16.2C11.6 16.8 12.4 16.8 13 16.2"/>
 </svg><span class="num">羊会</span><span class="catch">10月25日(日)<small>礼拝後</small></span></span>
       <span class="open"><span></span></span>
     </button>
@@ -535,7 +537,41 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
   <section class="panel" id="hitsujikai" role="region" aria-label="羊会">
     <button type="button" class="back" data-go="home">← もどる</button>
     <p class="issue"><small>羊会</small>10月25日(日)　礼拝後</p>
-    <div class="sp on"><p>羊会(役員会)の日です。</p></div>
+    <div class="sp on" id="hlock">
+      <p>羊会の資料は、パスワードで開きます。</p>
+      <form id="hform" autocomplete="off" style="display:flex;gap:8px;margin-top:10px">
+        <input id="hpw" type="password" inputmode="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="パスワード" aria-label="パスワード" style="flex:1;min-width:0;font:inherit;padding:10px 12px;border:1.5px solid var(--grey);border-radius:12px;background:#fff;color:var(--fg)">
+        <button class="btn" type="submit" style="border:0;font:inherit;cursor:pointer">ひらく</button>
+      </form>
+      <p class="note" id="herr" role="alert" style="margin-top:10px" hidden>パスワードがちがいます。</p>
+    </div>
+    <div class="sp on msg-hv" id="hbody" hidden></div>
+    <script type="application/json" id="hdata"><!--HDATA-->{"s":"u/oyURQQB+NW2fums03nFQ==","i":"KTuA0h7GLrbRD5YPFxja8Q==","n":100000,"c":"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"}<!--/HDATA--></script>
+    <script>
+    (function () {
+      var form = document.getElementById("hform"), pw = document.getElementById("hpw"), err = document.getElementById("herr");
+      var lock = document.getElementById("hlock"), body = document.getElementById("hbody");
+      function b64(s) { var r = atob(s), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
+      function open(password) {
+        var d = JSON.parse(document.getElementById("hdata").textContent);
+        var enc = new TextEncoder();
+        return crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]).then(function (km) {
+          return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(d.s), iterations: d.n, hash: "SHA-1" }, km, { name: "AES-CBC", length: 256 }, false, ["decrypt"]);
+        }).then(function (key) {
+          return crypto.subtle.decrypt({ name: "AES-CBC", iv: b64(d.i) }, key, b64(d.c));
+        }).then(function (buf) {
+          var t = new TextDecoder().decode(buf);
+          if (t.slice(0, 2) !== "OK") throw new Error("bad");
+          return t.slice(2);
+        });
+      }
+      function show(html) { body.innerHTML = html; body.hidden = false; lock.hidden = true; }
+      form.addEventListener("submit", function (e) {
+        e.preventDefault(); err.hidden = true;
+        open(pw.value.trim()).then(function (html) { show(html); pw.value = ""; }).catch(function () { err.hidden = false; });
+      });
+    })();
+    </script>
   </section>
 
   <section class="panel" id="shinkaido" role="region" aria-label="新会堂建築レポート">
