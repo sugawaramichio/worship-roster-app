@@ -222,7 +222,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards.home > [data-go="mission"] { order: 7; }
 .cards.home > [data-go="shinkaido"] { order: 8; }
 .cards.home > [href*="wixsite"] { order: 9; }
-.cards.home > [href*="note.com"] { order: 10; }
+.cards.home > [data-go="note"] { order: 10; }
 .cards.home > [data-go="hitsujikai"] { order: 11; }
 /* 窓の色: こい橙・うす橙・グレーがとなり合わないように配置 */
 .cards.home > [data-go="shuho"] .cover { background: #ffd2ae; }
@@ -233,7 +233,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards.home > [data-go="mission"] .cover { background: #f6f6f5; }
 .cards.home > [data-go="shinkaido"] .cover { background: var(--orange-soft); }
 .cards.home > [href*="wixsite"] .cover { background: var(--grey-soft); }
-.cards.home > [href*="note.com"] .cover { background: #ffd2ae; }
+.cards.home > [data-go="note"] .cover { background: #ffd2ae; }
 .cards.home > .hcard { display: flex; flex-direction: column; justify-content: flex-start; border: 0; background: transparent; }
 .cards.home > .hcard .cover { flex: 1 1 auto; align-content: center; }
 .cards.home > .hcard .open { flex: none; }
@@ -247,7 +247,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards:not(.home) > .card:nth-child(even) .cover { background: #f3f7fa; }
 /* 窓の色(最終): うす橙とグレーの2色を市松に交互に */
 .cards.home > [data-go="shuho"] .cover, .cards.home > [href*="worship-roster-app"] .cover, .cards.home > [data-go="kenkin"] .cover, .cards.home > [data-go="shinkaido"] .cover, .cards.home > [href*="wixsite"] .cover { background: #bfe0f5; }
-.cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [data-go="kaikei"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [data-go="hitsujikai"] .cover, .cards.home > [href*="note.com"] .cover { background: #f3f7fa; }
+.cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [data-go="kaikei"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [data-go="hitsujikai"] .cover, .cards.home > [data-go="note"] .cover { background: #f3f7fa; }
 .hcard .num, .hcard .num.one { color: var(--fg); -webkit-text-stroke: 0; font-weight: 700; }
 .hcard .ico { grid-row: 1 / span 2; align-self: center; width: 48px; height: 48px; padding: 0; background: none; fill: none; stroke: var(--deep); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .hcard .cover { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 8px; row-gap: 2px; align-content: center; align-items: end; min-height: 96px; }
@@ -324,10 +324,10 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" /><path d="M4 8l16 0" /><path d="M8 4l0 4" /></svg><span class="num one">ホームページ</span><span class="catch">教会の公式サイト</span></span>
       <span class="open"><span></span></span>
     </a>
-    <a class="card hcard c4" href="https://note.com/betaniyanikki" target="_blank" rel="noopener">
+    <button type="button" class="card hcard c4" data-go="note">
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg><span class="num one">note</span><span class="catch">牧師のコラム</span></span>
       <span class="open"><span></span></span>
-    </a>
+    </button>
     <button type="button" class="card hcard c3" data-go="hitsujikai">
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 8.2A2.6 2.6 0 0 1 11.3 6.3A2.6 2.6 0 0 1 15.3 6.2A2.6 2.6 0 0 1 19 8A2.6 2.6 0 0 1 21 11.8A2.6 2.6 0 0 1 19.6 15.4A2.6 2.6 0 0 1 16 17A2.6 2.6 0 0 1 12 17.2A2.6 2.6 0 0 1 8.6 15.8A2.6 2.6 0 0 1 7.2 12.2A2.6 2.6 0 0 1 8.2 8.2z"/><path d="M7.6 9.6L4.2 10.8C2.6 11.4 2.2 12.6 3 13.6L4.4 14.4C5.4 14.9 6.6 14.2 7.2 12.8"/><path d="M5.8 10.4L7 10.1"/><path d="M9 17.2L8.6 21H10.6L11 17.4"/><path d="M16.2 17L16.5 21H18.5L17.9 16.8"/>
 </svg><span class="num">羊会</span><span class="catch">10月25日(日)<small>礼拝後</small></span></span>
@@ -438,24 +438,6 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
     </div>
     </details>
 
-    <details class="card c4">
-      <summary>
-        <div class="cover"><div class="num">今週のコラム</div><p class="catch">Ⅰテモテ2:9-10</p></div>
-        <div class="open"><span></span></div>
-      </summary>
-    <div class="sp on column" id="s-column">
-      <h2>今週のコラム</h2>
-      <div class="scripture">同じように女たちも、つつましい身なりで、控えめに慎み深く身を飾り、はでな髪型や、金や真珠や高価な衣服ではなく、神を敬うと言っている女たちにふさわしく、良い行いで自分を飾りなさい。<cite>Ⅰテモテ2:9-10</cite></div>
-      <p>2010年、アメリカの人気歌手レディー・ガガが、音楽賞の式典に本物の生肉で作ったドレスで登場し、大きな話題になりました。ときにファッションは、びっくりするような装いを生み出します。パウロの時代のローマ帝国にも流行の髪型があり、頭の上に飾りを小山のように盛る派手なものもあったそうです。</p>
-      <p>エペソはローマ帝国の中でも最大級の都市の一つでした。生肉ドレスまではなかったでしょうが、最先端の装いで教会に来る人もいたのでしょう。パウロはそのような女性たちに、慎み深く控えめに身を飾るよう勧めます。ただし、特定の服装を禁じているのではありません。礼拝の雰囲気が守られるような装いを考えなさい、ということです。またファッションは人が集まる場の話題の中心にもなります。礼拝に集っても関心がファッションだけに向いてしまうことがないようにとの意味もあったと思われます。</p>
-      <p>ところが教会の歴史では、この箇所が女性の服装を縛る根拠に使われてきました。スカートは膝下でなければならない、暗い色でなければならないとか、です。これはとても残念なことです。パウロが私たちに伝えたいことは、どんな服装ならよいかではなく、服装においても礼拝と交わりが主にあって良いものになることを考えて欲しいということです。聖書が大切にしているのはルールではなく、神様の前にふさわしい在り方は何かという、信仰の方向性なのです。</p>
-      <p>ちなみに神様はご自分が創造されたモノを美しく装うことが大好きです。イエス様は、父なる神様は野の草をソロモン以上に美しく装われる、と語られましたが、被造物を彩ることを楽しまれる神がファッションが嫌いなわけがないと私は思います。オシャレ好きの皆さん、主を愛しながら、装いを楽しんで礼拝に集って下さい。</p>
-      <p>さらにパウロは、女性たちに「良い行いで自分を飾りなさい」と勧めます。外見を整えることは悪いことではありません。（身だしなみを整えることは、相手に対しての配慮という社会的なスキルの一つでもあります）しかし、人の価値は外側ではなく内側にあります。どんなに着飾った人でも、人を見下し傷つける人の傍にはいたくありません。外見も素晴らしいものですが、外見より内側が大切という当たり前で最も大切な価値基準を、しっかり握っていたいのです。</p>
-      <p>しかも、内側を良い行いで飾ることには力があります。ペテロは、信仰のない夫が、妻の無言のふるまいを見て神様に心を向けるようになると語りました。外見を飾ることには、人や場を華やかにしたり、楽しませたりという力がありますが、良い行いは、愛する人を救いへと導く力になるのです。すごい力です。</p>
-      <p>私たちは、十字架によって新しく生きる恵みを頂いたのですから、主にある者は誰もが良い行いに生きることができます。ですから、私たちは内側を良い行いで飾る者でありたいです。その装いに最も関心がある者でありたいです。</p>
-      <p style="margin-top:18px"><a class="btn" href="https://note.com/betaniyanikki" target="_blank" rel="noopener">noteを開く</a></p>
-    </div>
-    </details>
 
     <div class="card c5 fixed">
       <div class="cover"><div class="num">駐車場のお願い</div><p class="catch">礼拝前、礼拝後、駐車場の出庫にご協力ください。</p></div>
@@ -599,6 +581,23 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
       });
     })();
     </script>
+  </section>
+
+  <section class="panel" id="note" role="region" aria-label="牧師のコラム">
+    <button type="button" class="back" data-go="home">← もどる</button>
+    <p class="issue"><small>note</small>牧師のコラム</p>
+    <div class="sp on column" id="s-column">
+      <h2>今週のコラム</h2>
+      <div class="scripture">同じように女たちも、つつましい身なりで、控えめに慎み深く身を飾り、はでな髪型や、金や真珠や高価な衣服ではなく、神を敬うと言っている女たちにふさわしく、良い行いで自分を飾りなさい。<cite>Ⅰテモテ2:9-10</cite></div>
+      <p>2010年、アメリカの人気歌手レディー・ガガが、音楽賞の式典に本物の生肉で作ったドレスで登場し、大きな話題になりました。ときにファッションは、びっくりするような装いを生み出します。パウロの時代のローマ帝国にも流行の髪型があり、頭の上に飾りを小山のように盛る派手なものもあったそうです。</p>
+      <p>エペソはローマ帝国の中でも最大級の都市の一つでした。生肉ドレスまではなかったでしょうが、最先端の装いで教会に来る人もいたのでしょう。パウロはそのような女性たちに、慎み深く控えめに身を飾るよう勧めます。ただし、特定の服装を禁じているのではありません。礼拝の雰囲気が守られるような装いを考えなさい、ということです。またファッションは人が集まる場の話題の中心にもなります。礼拝に集っても関心がファッションだけに向いてしまうことがないようにとの意味もあったと思われます。</p>
+      <p>ところが教会の歴史では、この箇所が女性の服装を縛る根拠に使われてきました。スカートは膝下でなければならない、暗い色でなければならないとか、です。これはとても残念なことです。パウロが私たちに伝えたいことは、どんな服装ならよいかではなく、服装においても礼拝と交わりが主にあって良いものになることを考えて欲しいということです。聖書が大切にしているのはルールではなく、神様の前にふさわしい在り方は何かという、信仰の方向性なのです。</p>
+      <p>ちなみに神様はご自分が創造されたモノを美しく装うことが大好きです。イエス様は、父なる神様は野の草をソロモン以上に美しく装われる、と語られましたが、被造物を彩ることを楽しまれる神がファッションが嫌いなわけがないと私は思います。オシャレ好きの皆さん、主を愛しながら、装いを楽しんで礼拝に集って下さい。</p>
+      <p>さらにパウロは、女性たちに「良い行いで自分を飾りなさい」と勧めます。外見を整えることは悪いことではありません。（身だしなみを整えることは、相手に対しての配慮という社会的なスキルの一つでもあります）しかし、人の価値は外側ではなく内側にあります。どんなに着飾った人でも、人を見下し傷つける人の傍にはいたくありません。外見も素晴らしいものですが、外見より内側が大切という当たり前で最も大切な価値基準を、しっかり握っていたいのです。</p>
+      <p>しかも、内側を良い行いで飾ることには力があります。ペテロは、信仰のない夫が、妻の無言のふるまいを見て神様に心を向けるようになると語りました。外見を飾ることには、人や場を華やかにしたり、楽しませたりという力がありますが、良い行いは、愛する人を救いへと導く力になるのです。すごい力です。</p>
+      <p>私たちは、十字架によって新しく生きる恵みを頂いたのですから、主にある者は誰もが良い行いに生きることができます。ですから、私たちは内側を良い行いで飾る者でありたいです。その装いに最も関心がある者でありたいです。</p>
+    </div>
+    <p style="margin-top:22px"><a class="btn" style="display:block;text-align:center" href="https://note.com/betaniyanikki" target="_blank" rel="noopener">noteのトップページを開く</a></p>
   </section>
 
   <section class="panel" id="shinkaido" role="region" aria-label="新会堂建築レポート">
