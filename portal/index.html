@@ -553,7 +553,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
       var lock = document.getElementById("hlock"), body = document.getElementById("hbody");
       function b64(s) { var r = atob(s), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
       function open(password) {
-        var d = JSON.parse(document.getElementById("hdata").textContent);
+        var d = JSON.parse(document.getElementById("hdata").textContent.replace(/<!--\/?HDATA-->/g, ""));
         var enc = new TextEncoder();
         return crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]).then(function (km) {
           return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(d.s), iterations: d.n, hash: "SHA-1" }, km, { name: "AES-CBC", length: 256 }, false, ["decrypt"]);
