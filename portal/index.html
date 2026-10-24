@@ -265,6 +265,9 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .hcard .open { background: #fff; color: var(--fg); border-top: 1px solid var(--line); padding: 7px 14px; font-size: 0.85em; }
 .hcard .open span::before, .card:not([open]).hcard .open span::before { content: "OPEN"; letter-spacing: 0.12em; font-weight: 700; }
 .hcard .open::after { color: var(--deep); }
+.hcard .cover { grid-template-columns: 36px minmax(0, 1fr); column-gap: 6px; padding-left: 12px; padding-right: 8px; }
+.hcard .ico { width: 36px; height: 36px; }
+.hcard .num, .hcard .num.one { font-size: min(0.95em, 3.6vw); letter-spacing: -0.02em; }
 </style>
 
 <div class="wrap">
