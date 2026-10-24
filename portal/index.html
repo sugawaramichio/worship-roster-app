@@ -223,6 +223,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards.home > [data-go="shinkaido"] { order: 8; }
 .cards.home > [href*="wixsite"] { order: 9; }
 .cards.home > [href*="note.com"] { order: 10; }
+.cards.home > [data-go="hitsujikai"] { order: 11; }
 /* 窓の色: こい橙・うす橙・グレーがとなり合わないように配置 */
 .cards.home > [data-go="shuho"] .cover { background: #ffd2ae; }
 .cards.home > [data-go="calendar"] .cover { background: var(--grey-soft); }
@@ -246,7 +247,7 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards:not(.home) > .card:nth-child(even) .cover { background: #f3f7fa; }
 /* 窓の色(最終): うす橙とグレーの2色を市松に交互に */
 .cards.home > [data-go="shuho"] .cover, .cards.home > [href*="worship-roster-app"] .cover, .cards.home > [data-go="kenkin"] .cover, .cards.home > [data-go="shinkaido"] .cover, .cards.home > [href*="wixsite"] .cover { background: #bfe0f5; }
-.cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [data-go="kaikei"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [href*="note.com"] .cover { background: #f3f7fa; }
+.cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [data-go="kaikei"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [data-go="hitsujikai"] .cover, .cards.home > [href*="note.com"] .cover { background: #f3f7fa; }
 .hcard .num, .hcard .num.one { color: var(--fg); -webkit-text-stroke: 0; font-weight: 700; }
 .hcard .ico { grid-row: 1 / span 2; align-self: center; width: 48px; height: 48px; padding: 0; background: none; fill: none; stroke: var(--deep); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .hcard .cover { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 8px; row-gap: 2px; align-content: center; align-items: end; min-height: 96px; }
@@ -325,6 +326,10 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg><span class="num one">note</span><span class="catch">牧師のコラム</span></span>
       <span class="open"><span></span></span>
     </a>
+    <button type="button" class="card hcard c3" data-go="hitsujikai">
+      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"/><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M17 10h2a2 2 0 0 1 2 2v1"/><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M3 13v-1a2 2 0 0 1 2 -2h2"/></svg><span class="num">羊会</span><span class="catch">10月25日(日)<small>礼拝後</small></span></span>
+      <span class="open"><span></span></span>
+    </button>
   </div>
 
   <!-- 今月のカレンダー(Canvaの月間カレンダーの内容に合わせる) -->
@@ -524,6 +529,12 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
         <span>店番　003（だいいち支店）</span>
         <span>口座番号　0054321</span>
       </div>
+  </section>
+
+  <section class="panel" id="hitsujikai" role="region" aria-label="羊会">
+    <button type="button" class="back" data-go="home">← もどる</button>
+    <p class="issue"><small>羊会</small>10月25日(日)　礼拝後</p>
+    <div class="sp on"><p>羊会(役員会)の日です。</p></div>
   </section>
 
   <section class="panel" id="shinkaido" role="region" aria-label="新会堂建築レポート">
