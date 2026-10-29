@@ -254,6 +254,11 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .hcard .num, .hcard .num.one { grid-column: 2; font-size: min(0.9em, 3.3vw); line-height: 1.3; white-space: normal; word-break: auto-phrase; }
 .hcard .catch { grid-column: 2; margin-top: 0; align-self: start; line-height: 1.4; }
 .sp[hidden], .note[hidden] { display: none !important; }
+/* 礼拝出席の窓: noteの次、羊会の前。市松の色を保つため羊会をそらいろに */
+.cards.home > [data-go="attendance"] { order: 11; }
+.cards.home > [data-go="attendance"] .cover { background: #f3f7fa; }
+.cards.home > [data-go="hitsujikai"] { order: 12; }
+.cards.home > [data-go="hitsujikai"] .cover { background: #bfe0f5; }
 #hbody h3:first-child { margin-top: 14px; }
 /* 窓は全部おなじ大きさ(小さい窓)で2列にそろえる */
 .cards.home .c1, .cards.home .wide { grid-column: auto; }
@@ -331,6 +336,10 @@ html, body { overscroll-behavior-y: contain; }
     </a>
     <button type="button" class="card hcard c4" data-go="note">
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg><span class="num one">note</span><span class="catch">牧師のコラム</span></span>
+      <span class="open"><span></span></span>
+    </button>
+    <button type="button" class="card hcard c2" data-go="attendance">
+      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg><span class="num">礼拝出席</span><span class="catch">先週の人数<small>と今年の平均</small></span></span>
       <span class="open"><span></span></span>
     </button>
     <button type="button" class="card hcard c3" data-go="hitsujikai">
@@ -484,6 +493,34 @@ html, body { overscroll-behavior-y: contain; }
         <div><b>2025年の月平均</b><span class="val">約56万円</span><small>1ヶ月あたり 11万円不足</small></div>
       </div>
       <p class="goal">教会活動の継続のため、毎月約11万円の献金収入増額が必要です。</p>
+    </div>
+  </section>
+
+  <!-- 礼拝出席: 先週の人数 → 今年の平均(毎週、礼拝出席者人数データのスプレッドシートから写す) -->
+  <section class="panel" id="attendance" role="region" aria-label="礼拝出席">
+    <button type="button" class="back" data-go="home">← もどる</button>
+    <p class="issue"><small>ATTENDANCE</small>礼拝出席</p>
+
+    <p class="label">先週の日曜礼拝　10月25日(日)</p>
+    <div class="dash">
+      <div class="big now">
+        <b>礼拝に集われた方</b>
+        <span class="val">38人</span>
+        <small>大人 28人　／　子ども 10人</small>
+      </div>
+    </div>
+
+    <p class="label">2026年の平均</p>
+    <div class="dash">
+      <div class="big">
+        <b>1月～10月25日の礼拝　1回あたり</b>
+        <span class="val">29.4人</span>
+        <small>記録のある33回の平均です</small>
+      </div>
+      <div class="pair">
+        <div><b>大人</b><span class="val">22.1人</span></div>
+        <div><b>子ども</b><span class="val">7.3人</span></div>
+      </div>
     </div>
   </section>
 
