@@ -261,6 +261,9 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 .cards.home > [data-go="hitsujikai"] { order: 12; }
 .cards.home > [data-go="hitsujikai"] .cover { background: #bfe0f5; }
 #hbody h3:first-child { margin-top: 14px; }
+/* SNSの窓: 礼拝出席・羊会の後ろ(最後)に置く */
+.cards.home > [data-go="sns"] { order: 13; }
+.cards.home > [data-go="sns"] .cover { background: #f3f7fa; }
 /* 窓は全部おなじ大きさ(小さい窓)で2列にそろえる */
 .cards.home .c1, .cards.home .wide { grid-column: auto; }
 .c1.hcard .cover, .wide .cover { flex-direction: column; align-items: stretch; }
@@ -337,6 +340,10 @@ html, body { overscroll-behavior-y: contain; }
     </a>
     <button type="button" class="card hcard c4" data-go="note">
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg><span class="num one">note</span><span class="catch">牧師のコラム</span></span>
+      <span class="open"><span></span></span>
+    </button>
+    <button type="button" class="card hcard c4" data-go="sns">
+      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M16.5 7.5v.01"/></svg><span class="num one">SNS</span><span class="catch">Instagram<small>・Facebook</small></span></span>
       <span class="open"><span></span></span>
     </button>
     <button type="button" class="card hcard c2" data-go="attendance">
@@ -648,6 +655,21 @@ html, body { overscroll-behavior-y: contain; }
       <p>リーダーを監視する必要はありません。けれども神の家族として、愛情をもって教会と役員会のことを覚えて祈っていきましょう。そのような祈りの中で、神様は教会を豊かに成長させてくださいます。</p>
     </div>
     <p style="margin-top:22px"><a class="btn" style="display:block;text-align:center" href="https://note.com/betaniyanikki" target="_blank" rel="noopener">noteのトップページを開く</a></p>
+  </section>
+
+  <section class="panel" id="sns" role="region" aria-label="教会のSNS">
+    <button type="button" class="back" data-go="home">← もどる</button>
+    <p class="issue"><small>SNS</small>教会のInstagram・Facebook</p>
+    <div class="sp on">
+      <p>教会の日々の様子を、InstagramとFacebookでお伝えしています。ぜひのぞいてみてください。</p>
+      <h3 class="label2">Instagram</h3>
+      <p><a class="btn" style="display:block;text-align:center" href="https://www.instagram.com/komatsu_bethany/" target="_blank" rel="noopener">Instagramを開く</a></p>
+      <p style="text-align:center"><img src="qr_instagram.png" alt="InstagramのQRコード" width="200" height="200" style="max-width:60%;height:auto"></p>
+      <h3 class="label2">Facebook</h3>
+      <p><a class="btn" style="display:block;text-align:center" href="https://www.facebook.com/profile.php?id=61596127567554" target="_blank" rel="noopener">Facebookを開く</a></p>
+      <p style="text-align:center"><img src="qr_facebook.png" alt="FacebookのQRコード" width="200" height="200" style="max-width:60%;height:auto"></p>
+      <p class="note">パソコンで見ているときは、QRコードをスマホで読み取ってください。</p>
+    </div>
   </section>
 
   <section class="panel" id="shinkaido" role="region" aria-label="新会堂建築レポート">
