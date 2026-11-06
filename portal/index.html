@@ -264,6 +264,23 @@ a.hcard { display: block; text-decoration: none; color: inherit; }
 /* SNSの窓: 礼拝出席・羊会の後ろ(最後)に置く */
 .cards.home > [data-go="sns"] { order: 13; }
 .cards.home > [data-go="sns"] .cover { background: #f3f7fa; }
+/* 窓の並び(2026-11-06): 週報・カレンダー / EVENT・奉仕アプリ / 献金・宣教 / 新会堂・ホームページ / note・SNS / (下にまとめ)会計・羊会・礼拝出席 */
+.cards.home > [data-go="shuho"] { order: 1; }
+.cards.home > [data-go="calendar"] { order: 2; }
+.cards.home > [data-go="event"] { order: 3; }
+.cards.home > [href*="worship-roster-app"] { order: 4; }
+.cards.home > [data-go="kenkin"] { order: 5; }
+.cards.home > [data-go="mission"] { order: 6; }
+.cards.home > [data-go="shinkaido"] { order: 7; }
+.cards.home > [href*="wixsite"] { order: 8; }
+.cards.home > [data-go="note"] { order: 9; }
+.cards.home > [data-go="sns"] { order: 10; }
+.cards.home > [data-go="kaikei"] { order: 11; }
+.cards.home > [data-go="hitsujikai"] { order: 12; }
+.cards.home > [data-go="attendance"] { order: 13; }
+/* 市松の色をそろえ直す */
+.cards.home > [data-go="shuho"] .cover, .cards.home > [href*="worship-roster-app"] .cover, .cards.home > [data-go="kenkin"] .cover, .cards.home > [href*="wixsite"] .cover, .cards.home > [data-go="note"] .cover, .cards.home > [data-go="hitsujikai"] .cover, .cards.home > [data-go="attendance"] .cover { background: #bfe0f5; }
+.cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [data-go="shinkaido"] .cover, .cards.home > [data-go="sns"] .cover, .cards.home > [data-go="kaikei"] .cover { background: #f3f7fa; }
 /* 窓は全部おなじ大きさ(小さい窓)で2列にそろえる */
 .cards.home .c1, .cards.home .wide { grid-column: auto; }
 .c1.hcard .cover, .wide .cover { flex-direction: column; align-items: stretch; }
