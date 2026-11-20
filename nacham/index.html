@@ -56,6 +56,8 @@ td.k{white-space:nowrap;font-weight:500}
 .disc{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:16px 18px;margin:18px 0}
 .disc h3{border:0;padding:0;margin:0 0 8px;color:var(--accent)}
 .disc ul{margin:0;padding-left:1.3em}
+.disc .memo{margin:14px 0 0}
+.disc .memo textarea,.disc .memo-out{background:#ffffff;color:#262626}
 .disc li{margin-bottom:8px}
 .note{font-size:14px;color:var(--muted)}
 .callout{border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);padding:14px 4px;margin:18px 0;font-weight:700;font-size:17px;text-align:center}
@@ -191,6 +193,10 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
       <li>現在地をデータで見て、どのような発見や課題を感じましたか？</li>
       <li>イエス様は、このところに立たされている教会をどのように見ておられると思いますか？</li>
     </ul>
+    <div class="memo">
+      <label for="memo-d1">メモ</label>
+      <textarea id="memo-d1" rows="5" placeholder="ここに書けます"></textarea>
+    </div>
   </div>
 </section>
 
@@ -252,20 +258,14 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
       <li>これからの北陸の宣教を考えたときに、どのような可能性があると思わされましたか？</li>
       <li>自分の地域で、どの教会・団体・人々と協力できるでしょうか？</li>
     </ul>
+    <div class="memo">
+      <label for="memo-d2">メモ</label>
+      <textarea id="memo-d2" rows="5" placeholder="ここに書けます"></textarea>
+    </div>
   </div>
-  <h2>私自身の応答</h2>
-  <p>神様から示されたこと、祈りたいこと、これから一歩踏み出したいことを書き留めましょう。</p>
-  <div class="memo">
-    <label for="memo-prayer">祈りの課題</label>
-    <textarea id="memo-prayer" rows="5" placeholder="ここに書けます"></textarea>
-  </div>
-  <div class="memo">
-    <label for="memo-step">今日の一歩：誰と何を始めますか？</label>
-    <textarea id="memo-step" rows="5" placeholder="ここに書けます"></textarea>
-  </div>
-  <p class="note">書いたメモは、このスマホの中だけに残ります。どこにも送られません。</p>
+  <p class="note">書いたメモは、あなたのスマホの中だけに残ります。</p>
   <div class="actions pdf-hide">
-    <button type="button" id="pdf-btn">メモ入りのPDFを保存</button>
+    <button type="button" id="pdf-btn">メモ入りのPDFをスマホに保存</button>
     <p id="pdf-status" class="note" role="status" aria-live="polite"></p>
   </div>
 </section>
@@ -276,7 +276,7 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 <script>
 (function(){
   var KEY='nachamBS-1121-';
-  var ids=['memo-prayer','memo-step'];
+  var ids=['memo-d1','memo-d2'];
   ids.forEach(function(id){
     var t=document.getElementById(id);
     try{var v=localStorage.getItem(KEY+id); if(v) t.value=v;}catch(e){}
