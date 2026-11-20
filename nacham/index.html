@@ -329,7 +329,6 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
       clone.querySelectorAll('section').forEach(function(sec){
         Array.prototype.forEach.call(sec.children,function(c){blocks.push(c);});
       });
-      blocks.push(clone.querySelector('footer'));
 
       var pdf=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
       var M=12, PW=210-2*M, PH=297-2*M;
