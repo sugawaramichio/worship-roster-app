@@ -13,15 +13,15 @@
 /* Layout: 1 column reading page, sticky chip nav, orange accent on grey like the flyer */
 :root{
   --bg:#f1f1ef; --card:#ffffff; --fg:#262626; --muted:#666663; --line:#dcdcd8;
-  --accent:#d9692a; --accent-soft:#fbe9dc; --quote:#ebebe8;
+  --accent:#d9692a; --accent-soft:#fbe9dc; --quote:#ebebe8; --on-accent:#ffffff;
   --font:'Noto Sans JP','Hiragino Sans','Yu Gothic','Meiryo',sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#2a2a2a; --card:#343433; --fg:#f0efeb; --muted:#b0afa9; --line:#4a4a48;
-  --accent:#ff9a55; --accent-soft:#4a3626; --quote:#3b3b39; color-scheme:dark}}
+  --accent:#ff9a55; --accent-soft:#4a3626; --quote:#3b3b39; --on-accent:#1f1f1f; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#2a2a2a; --card:#343433; --fg:#f0efeb; --muted:#b0afa9; --line:#4a4a48;
-  --accent:#ff9a55; --accent-soft:#4a3626; --quote:#3b3b39; color-scheme:dark}
+  --accent:#ff9a55; --accent-soft:#4a3626; --quote:#3b3b39; --on-accent:#1f1f1f; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.85;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
@@ -59,6 +59,15 @@ td.k{white-space:nowrap;font-weight:500}
 .disc li{margin-bottom:8px}
 .note{font-size:14px;color:var(--muted)}
 .callout{border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);padding:14px 4px;margin:18px 0;font-weight:700;font-size:17px;text-align:center}
+.memo{display:flex;flex-direction:column;gap:6px;margin:18px 0}
+.memo label{font-weight:700}
+.memo textarea{width:100%;min-height:7.5em;resize:vertical;font:inherit;font-size:17px;line-height:1.8;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.memo textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.memo-out{white-space:pre-wrap;border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-height:5em;background:var(--card)}
+.actions{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+#pdf-btn{width:100%;min-height:54px;font:inherit;font-size:17px;font-weight:700;color:var(--on-accent);background:var(--accent);border:0;border-radius:12px;cursor:pointer}
+#pdf-btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+#pdf-btn:disabled{opacity:.6;cursor:wait}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 /* Phone: larger text, and 2-column tables become stacked cards (label on top, content full width) */
 @media(max-width:600px){
@@ -246,15 +255,121 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
   </div>
   <h2>私自身の応答</h2>
   <p>神様から示されたこと、祈りたいこと、これから一歩踏み出したいことを書き留めましょう。</p>
-  <ul class="list">
-    <li>祈りの課題</li>
-    <li>今日の一歩：誰と何を始めますか？</li>
-  </ul>
-  <p class="note">書き留める欄は、お手元の紙のハンドアウトをお使いください。</p>
+  <div class="memo">
+    <label for="memo-prayer">祈りの課題</label>
+    <textarea id="memo-prayer" rows="5" placeholder="ここに書けます"></textarea>
+  </div>
+  <div class="memo">
+    <label for="memo-step">今日の一歩：誰と何を始めますか？</label>
+    <textarea id="memo-step" rows="5" placeholder="ここに書けます"></textarea>
+  </div>
+  <p class="note">書いたメモは、このスマホの中だけに残ります。どこにも送られません。</p>
+  <div class="actions pdf-hide">
+    <button type="button" id="pdf-btn">メモ入りのPDFを保存</button>
+    <p id="pdf-status" class="note" role="status" aria-live="polite"></p>
+  </div>
 </section>
 
 <footer>ナーハムバイブルスクール 第2回｜小松ベタニヤ福音教会｜2026年11月21日(土)</footer>
 </div>
+
+<script>
+(function(){
+  var KEY='nachamBS-1121-';
+  var ids=['memo-prayer','memo-step'];
+  ids.forEach(function(id){
+    var t=document.getElementById(id);
+    try{var v=localStorage.getItem(KEY+id); if(v) t.value=v;}catch(e){}
+    t.addEventListener('input',function(){ try{localStorage.setItem(KEY+id,t.value);}catch(e){} });
+  });
+
+  var LIGHT={'--bg':'#ffffff','--card':'#ffffff','--fg':'#262626','--muted':'#666663','--line':'#dcdcd8',
+    '--accent':'#d9692a','--accent-soft':'#fbe9dc','--quote':'#ebebe8','--on-accent':'#ffffff'};
+
+  function loadScript(src){
+    return new Promise(function(res,rej){
+      var s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s);
+    });
+  }
+  var libs=null;
+  function ensureLibs(){
+    if(!libs){
+      libs=loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
+        .then(function(){return loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');});
+      libs.catch(function(){libs=null;});
+    }
+    return libs;
+  }
+
+  var btn=document.getElementById('pdf-btn');
+  var status=document.getElementById('pdf-status');
+
+  btn.addEventListener('click',async function(){
+    btn.disabled=true; status.textContent='PDFを作っています。少しお待ちください…';
+    var box=null;
+    try{
+      await ensureLibs();
+      var src=document.querySelector('.wrap');
+      box=document.createElement('div');
+      box.style.cssText='position:absolute;left:-10000px;top:0;width:720px;padding:24px 32px;background:#ffffff;color:#262626;font-size:16px;';
+      Object.keys(LIGHT).forEach(function(k){box.style.setProperty(k,LIGHT[k]);});
+      var clone=src.cloneNode(true);
+      clone.querySelectorAll('nav,.pdf-hide').forEach(function(e){e.remove();});
+      clone.querySelectorAll('textarea').forEach(function(t){
+        var out=document.createElement('div'); out.className='memo-out';
+        var v=document.getElementById(t.id).value.trim();
+        out.textContent=v||'（未記入）';
+        t.replaceWith(out);
+      });
+      box.appendChild(clone); document.body.appendChild(box);
+      if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+
+      var blocks=[];
+      blocks.push(clone.querySelector('header'));
+      clone.querySelectorAll('section').forEach(function(sec){
+        Array.prototype.forEach.call(sec.children,function(c){blocks.push(c);});
+      });
+      blocks.push(clone.querySelector('footer'));
+
+      var pdf=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
+      var M=12, PW=210-2*M, PH=297-2*M;
+      var k=PW/clone.clientWidth;
+      var y=M;
+      for(var i=0;i<blocks.length;i++){
+        var b=blocks[i]; if(!b) continue;
+        var tag=b.tagName;
+        var canvas=await window.html2canvas(b,{scale:2,backgroundColor:'#ffffff',logging:false});
+        var w=canvas.width/2*k, h=canvas.height/2*k;
+        var gapBefore=(tag==='H2')?6:(tag==='H3'?3:0);
+        var keepNext=(tag==='H2'||tag==='H3')?25:0;
+        if(y>M && y+gapBefore+h+keepNext>M+PH){pdf.addPage(); y=M;} else {y+=gapBefore;}
+        if(h<=PH){
+          pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',M,y,w,h);
+          y+=h+2.5;
+        }else{
+          var pxPerMm=canvas.height/h, done=0;
+          while(done<canvas.height){
+            var room=(M+PH-y)*pxPerMm;
+            var part=Math.min(room,canvas.height-done);
+            var c=document.createElement('canvas'); c.width=canvas.width; c.height=Math.ceil(part);
+            c.getContext('2d').drawImage(canvas,0,done,canvas.width,part,0,0,canvas.width,part);
+            pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',M,y,w,part/pxPerMm);
+            done+=part; y+=part/pxPerMm+2.5;
+            if(done<canvas.height){pdf.addPage(); y=M;}
+          }
+        }
+      }
+      pdf.save('ナーハムBS_ハンドアウト_メモ入り.pdf');
+      status.textContent='PDFができました。保存先は、スマホのダウンロードかファイルの中です。';
+    }catch(e){
+      status.textContent='PDFを作れませんでした。LINEの中で開いている場合は、SafariかChromeで開き直してから、もう一度押してください。';
+    }finally{
+      if(box) box.remove();
+      btn.disabled=false;
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
