@@ -60,7 +60,24 @@ td.k{white-space:nowrap;font-weight:500}
 .note{font-size:14px;color:var(--muted)}
 .callout{border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);padding:14px 4px;margin:18px 0;font-weight:700;font-size:17px;text-align:center}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-@media(max-width:420px){h1{font-size:24px}}
+/* Phone: larger text, and 2-column tables become stacked cards (label on top, content full width) */
+@media(max-width:600px){
+  body{font-size:18px;line-height:1.9}
+  h1{font-size:26px}
+  h2{font-size:21px}
+  h3{font-size:18px}
+  .eyebrow{font-size:13px}
+  .speaker,.note{font-size:15px}
+  nav a{font-size:14px}
+  table{font-size:17px}
+  th{font-size:14px}
+  table.stack{min-width:0}
+  table.stack thead{display:none}
+  table.stack tr{display:block;padding:14px 16px;border-bottom:1px solid var(--line)}
+  table.stack tr:last-child{border-bottom:0}
+  table.stack td{display:block;padding:0;border:0}
+  table.stack td.k{white-space:normal;color:var(--accent);font-size:15px;font-weight:700;margin-bottom:4px}
+}
 </style>
 </head>
 <body>
@@ -105,7 +122,7 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 
 <section id="s2">
   <h2><span class="n">2．</span>日本の教会が歩んできた道</h2>
-  <div class="tw"><table>
+  <div class="tw"><table class="stack">
     <thead><tr><th>時期</th><th>主な出来事</th></tr></thead>
     <tbody>
       <tr><td class="k">1549～1647年</td><td>ローマ・カトリックの宣教。ザビエル来日、キリスト教迫害、約250年間の隠れキリシタンの歴史。</td></tr>
@@ -127,7 +144,7 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 <section id="s3">
   <h2><span class="n">3．</span>現在地 ― 日本の教会をデータで見る</h2>
   <h3>講義資料に掲載された主なデータ</h3>
-  <div class="tw"><table>
+  <div class="tw"><table class="stack">
     <thead><tr><th>テーマ</th><th>スライドに示された内容</th></tr></thead>
     <tbody>
       <tr><td class="k">プロテスタント教勢（2014年）</td><td>教会数 7,969／信徒数 約62万人／対人口比 0.48％</td></tr>
