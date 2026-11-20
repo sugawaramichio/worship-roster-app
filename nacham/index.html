@@ -70,6 +70,16 @@ td.k{white-space:nowrap;font-weight:500}
 #pdf-btn{width:100%;min-height:54px;font:inherit;font-size:17px;font-weight:700;color:var(--on-accent);background:var(--accent);border:0;border-radius:12px;cursor:pointer}
 #pdf-btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 #pdf-btn:disabled{opacity:.6;cursor:wait}
+table.prog{min-width:0}
+table.prog td.t{width:4.5em;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
+.line-box{background:var(--card);border:2px solid #06c755;border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.line-box h2{margin:0}
+.line-box h3{align-self:stretch;text-align:left;margin:12px 0 0}
+.line-box ul{align-self:stretch;text-align:left}
+.line-qr{width:240px;height:240px;max-width:100%;background:#ffffff;padding:8px;border-radius:8px}
+.line-btn{display:block;width:100%;min-height:54px;line-height:54px;border-radius:12px;background:#06c755;color:#ffffff;font-weight:700;font-size:17px;text-decoration:none}
+.line-btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.line-url{margin:0;font-size:14px;color:var(--muted);word-break:break-all;user-select:all}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 /* Phone: larger text, and 2-column tables become stacked cards (label on top, content full width) */
 @media(max-width:600px){
@@ -101,6 +111,7 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 </header>
 
 <nav aria-label="目次"><ul>
+  <li><a href="#prog">プログラム</a></li>
   <li><a href="#s0">中心聖句</a></li>
   <li><a href="#s1">1 荒野</a></li>
   <li><a href="#s2">2 日本の教会の道</a></li>
@@ -110,6 +121,24 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
   <li><a href="#s6">6 ネットワーク</a></li>
   <li><a href="#s7">分かち合い②</a></li>
 </ul></nav>
+
+<section id="prog">
+  <h2>プログラム</h2>
+  <div class="tw"><table class="prog">
+    <tbody>
+      <tr><td class="t">13:30</td><td>あいさつ・賛美</td></tr>
+      <tr><td class="t">13:35</td><td>セッション1　播義也師</td></tr>
+      <tr><td class="t">14:15</td><td>分かち合い(10分)・発表(10分)</td></tr>
+      <tr><td class="t">14:35</td><td>休憩</td></tr>
+      <tr><td class="t">14:45</td><td>ブンキョウゴスペルセンターの取り組み紹介<br>河合保昌さん(ブンキョウゴスペルセンター代表)</td></tr>
+      <tr><td class="t">15:00</td><td>セッション2　播義也師</td></tr>
+      <tr><td class="t">15:30</td><td>休憩</td></tr>
+      <tr><td class="t">15:35</td><td>分かち合い(10分)・発表(10分)</td></tr>
+      <tr><td class="t">15:55</td><td>質疑応答</td></tr>
+      <tr><td class="t">16:00</td><td>終了</td></tr>
+    </tbody>
+  </table></div>
+</section>
 
 <section id="s0">
   <div class="verse">
@@ -267,6 +296,21 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
   <div class="actions pdf-hide">
     <button type="button" id="pdf-btn">メモ入りのPDFをスマホに保存</button>
     <p id="pdf-status" class="note" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="line">
+  <div class="line-box">
+    <h2>LINEグループ「ナーハムバイブルスクール」にご参加ください。</h2>
+    <img class="line-qr" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYwAAAGMAQAAAADhQqjnAAACr0lEQVR4nO1cQY4jIQy0S7mTH+z/f9e8wCtjTJPsHsazEsMSW61MN6EkGpdsU4RhoaBVRBFECYkawghKSNQQRlBC9pwxEpkiWRF71M8icvXGlw5XujJqCCPoOEhRahm7mFlJVVkJNtg1daDN3yVmCPanhNB3Z4yZ+ak3cullNLsfpw6UfgkbEvJiFruqRjN+kvNqNlDYkJCg4WAIM1MdIasHsR0G9gXDVzolZPmMPezPKOulKr2ESDNlS5dclGdT3Y8lA0NCTl1X0l+vqYPkuvIc72NZHJPpWazUbzd6WeMPDAwJOWXGyKSwcfWwNoSytsYccplIxjEs8QsO5FizLoIZnUzBcCXWCEaZK2lbV2LrXFnZSn32LKnCxdRJ6pPvFiwZGBJyWM0vbr1xEvlHusxcubcrsTWkdFVfZbFGJ/7VWlqi7FrZ6EB7v0vMEOxPCaHv6WO18cfXjyNLag6dk2a/T79EDWEEnQYRX1qqyG/JsbJGM99L6mp/o+Lm7xI0RAGUkLiJmekSoyrzpeWtXfjSUlKDDRs+G0Kj1B91vnPppt+sZkhy7BzvY+V+JVk91kSMtlP5FN+pHPWYyxdYMjAk5EANtkwpchL/x69hM47t7UrsCqGRDWedf/72TeqXzJXneB8/EsfI49Wozd5+bi3JsXO8j5W/u5D2IHPd5aIZeVXm91gyMCTk2HNJV49dL4vNEdNKxjEs8QtOW1eWnhFtCcl/tHQW9jpt23dBQnaeMfZjR/y8I1tfYFb90gjGuV9JyeR/nTFppLJ7ZZSfgOvHSdRykqOGz4Y83p65XCbG9lK/iCmxuoPZU+e274KE/CfnkljZZUfFpzNK4uI/pSvDhs+GPPTDk+Nr2d/WkpYrG9n8HByWDAwJOWXGOP831CmuREKChiiAEhK2NZP8G2uOuXcvJvYrAAAAAElFTkSuQmCC" alt="LINEグループ「ナーハムバイブルスクール」のQRコード" width="240" height="240">
+    <a class="line-btn" href="https://line.me/R/ti/g/tyBHwcpvDX" target="_blank" rel="noopener">LINEグループに参加する</a>
+    <p class="line-url">https://line.me/R/ti/g/tyBHwcpvDX</p>
+    <h3>3つの場所づくりを目指します</h3>
+    <ul class="list">
+      <li>今後の教会のあり方について、情報を分かち合いながら相談する場。</li>
+      <li>必要な助けを、お互いに見つけつなげる場。</li>
+      <li>これからも続けて、一緒に学び合う場。</li>
+    </ul>
   </div>
 </section>
 
