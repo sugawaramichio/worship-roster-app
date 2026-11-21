@@ -309,6 +309,7 @@ html, body { overscroll-behavior-y: contain; }
 .cards.home > [data-go="sns"] { order: 11; }
 .cards.home > [data-go="kaikei"] { order: 12; }
 .cards.home > [data-go="hitsujikai"] { order: 13; }
+.cards.home > [data-go="hitsujikai"] { display: none; }
 .cards.home > [data-go="attendance"] { order: 14; }
 .cards.home > [data-go="shuho"] .cover, .cards.home > [data-go="event"] .cover, .cards.home > [href*="worship-roster-app"] .cover, .cards.home > [data-go="shinkaido"] .cover, .cards.home > [href*="wixsite"] .cover, .cards.home > [data-go="kaikei"] .cover, .cards.home > [data-go="hitsujikai"] .cover { background: #bfe0f5; }
 .cards.home > [data-go="sermon"] .cover, .cards.home > [data-go="calendar"] .cover, .cards.home > [data-go="kenkin"] .cover, .cards.home > [data-go="mission"] .cover, .cards.home > [data-go="note"] .cover, .cards.home > [data-go="sns"] .cover, .cards.home > [data-go="attendance"] .cover { background: #f3f7fa; }
@@ -335,7 +336,7 @@ html, body { overscroll-behavior-y: contain; }
   <!-- 最初の画面: 大きな窓。ここから各項目へ降りていく。宣教・新会堂などは、ここに窓を足していく -->
   <div class="cards home" id="home">
     <button type="button" class="card hcard c1" data-go="shuho">
-      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg><span class="num">今週の週報</span><span class="catch">№242<small>2026年11月15日</small></span></span>
+      <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg><span class="num">今週の週報</span><span class="catch">№243<small>2026年11月22日</small></span></span>
       <span class="open"><span></span></span>
     </button>
     <button type="button" class="card hcard c3" data-go="sermon">
@@ -411,13 +412,13 @@ html, body { overscroll-behavior-y: contain; }
   <!-- 週報 -->
   <section class="panel" id="shuho" role="region" aria-label="週報">
     <button type="button" class="back" data-go="home">← もどる</button>
-    <p class="issue"><small>今週の週報</small>№242　2026年11月15日</p>
+    <p class="issue"><small>今週の週報</small>№243　2026年11月22日</p>
 
     <div class="cards">
 
     <details class="card c1">
       <summary>
-        <div class="cover"><div class="num">今週の礼拝プログラム</div><p class="catch">祝祷　朝山長老</p></div>
+        <div class="cover"><div class="num">今週の礼拝プログラム</div><p class="catch">祝祷　田中師</p></div>
         <div class="open"><span></span></div>
       </summary>
     <div class="sp on" id="s-program">
@@ -428,7 +429,7 @@ html, body { overscroll-behavior-y: contain; }
         <li><b>3</b>主の祈り／使徒信条／ウェルカムタイム</li>
         <li><b>4</b>賛美／献金</li>
         <li class="hl"><b>5</b>メッセージ</li>
-        <li><b>6</b>祝祷（朝山長老）</li>
+        <li><b>6</b>祝祷（田中師）</li>
       </ol>
       <p class="note" style="margin-top:12px">※献金は教会の大切な礼拝の一つであり、各人の信仰によって全く自由に捧げるものです。初めての方はお気になさらず、献金箱をそのまま横の席にお渡し下さい。</p>
       <div class="blessing">主イエス・キリストの恵み、神の愛、聖霊の交わりが、<br>あなたがた一同と共にありますように。<small>コリントⅡ　13：13</small></div>
@@ -472,13 +473,12 @@ html, body { overscroll-behavior-y: contain; }
     <div class="sp on" id="s-news">
       <h2>お知らせ</h2>
       <ul class="plain">
-        <li><b>11月15日（日）</b>礼拝後　羊会</li>
-        <li><b>11月21日（土）</b>13:30～16:00　ナーハムバイブルスクール<small>ゲスト：播師</small></li>
-        <li><b>11月27日（金）</b>18:30　CPM北陸集会<small>金沢勤労者プラザ</small></li>
-        <li><b>11月28日（土）</b>14:00　CPM北陸集会<small>金沢こころチャペル</small></li>
+        <li><b>11月22日（日）</b>礼拝後　炊き込みご飯とお味噌汁（1人200円）<small>ぜひ交わりの時間を</small></li>
+        <li><b>11月28日（土）</b>14:00　CPM北陸集会<small>金沢こころチャペル　12:45 教会から出発します。一緒に行きたい方はお集まりください</small></li>
         <li><b>11月29日（日）</b>礼拝後　大掃除</li>
         <li><b>11月29日（日）</b>14:30　CLC講演会<small>講師：佐藤彰師　福井自由</small></li>
         <li><b>12月6日（日）</b>礼拝　アンテオケ宣教会　大田先生ご夫妻</li>
+        <li><b>12月13日（日）</b>クリスマスコンサート礼拝</li>
       </ul>
     </div>
     </details>
@@ -547,23 +547,23 @@ html, body { overscroll-behavior-y: contain; }
     <button type="button" class="back" data-go="home">← もどる</button>
     <p class="issue"><small>ATTENDANCE</small>礼拝出席</p>
 
-    <p class="label">先週の日曜礼拝　11月8日(日)</p>
+    <p class="label">先週の日曜礼拝　11月15日(日)</p>
     <div class="dash">
       <div class="big now">
-        <span class="val">45人</span>
-        <small>大人 36人　／　子ども 9人</small>
+        <span class="val">36人</span>
+        <small>大人 27人　／　子ども 9人</small>
       </div>
     </div>
 
     <p class="label">2026年の平均</p>
     <div class="dash">
       <div class="big">
-        <b>1月～11月8日の礼拝　1回あたり</b>
-        <span class="val">29.9人</span>
-        <small>記録のある34回の平均です</small>
+        <b>1月～11月15日の礼拝　1回あたり</b>
+        <span class="val">30.1人</span>
+        <small>記録のある35回の平均です</small>
       </div>
       <div class="pair">
-        <div><b>大人</b><span class="val">22.5人</span></div>
+        <div><b>大人</b><span class="val">22.6人</span></div>
         <div><b>子ども</b><span class="val">7.4人</span></div>
       </div>
     </div>
@@ -710,21 +710,17 @@ html, body { overscroll-behavior-y: contain; }
     <p class="issue"><small>note</small>牧師のコラム</p>
     <div class="sp on column" id="s-column">
       <h2>今週のコラム</h2>
-      <div class="scripture">俗悪で愚にもつかない作り話を避けなさい。むしろ、敬虔のために自分自身を鍛錬しなさい。肉体の鍛錬も少しは有益ですが、今のいのちと来たるべきいのちを約束する敬虔は、すべてに有益です。<cite>Ⅰテモテ4:7-8</cite></div>
-      <h3 class="label2">療養の中で…</h3><p>宮城県で働くある牧師は、東日本大震災で被災された後、教会の立て直しと被災地支援に追われる日々を二年半過ごされました。そしてついに心身のバランスを崩し、何か月も休まなければならなくなったそうです。その療養期間に、神様が静かに語りかけてくださったのが、このテモテへの手紙第一4章でした。先生はみことばを一つひとつ味わう中で、ご自分の働き方を見直し、健康を取り戻していかれたそうです。</p>
-      <h3 class="label2">テモテへのメッセージ</h3><p>4章6節から、パウロの言葉は教会の諸問題から、テモテ自身へと向けられていきます。牧会に行き詰まり、疲れていたテモテに、パウロは、牧師・伝道者としての歩み方そのものを語り直したのです。それは牧師だけでなく、信仰の歩みに行き詰まり悩むすべての人を、健康な歩みへと導く神様からのメッセージでもあります。</p>
-      <h3 class="label2">良い教えに養われる</h3><p>パウロがまず語ったのは、「俗悪で愚にもつかない作り話を避けなさい。」でした。それは言い換えれば、歪んだ教えを避け、良い教えに養われることに心を配りなさいということです。</p>
-      <p>私たちの体は、食べた物によって造られます。良い物を食べれば健康な体が、有害な物なら不健康な体ができます。同じように、私たちの心と信仰は、いつも聞いている言葉によって造られます。</p>
-      <p>霊性神学の大家ダラス・ウィラードは<strong>「生まれながらの聖人はいないし、生まれながらのテロリストもいない」</strong>と語りました。人の心と思考は、日々触れる言葉によって形づくられるのです。ですから、信仰の健康に保つ要は、純粋なみことば、聖書そのものに養われることです。</p>
-      <h3 class="label2">敬虔のために鍛える</h3><p>次にパウロは、「敬虔」のために自分を鍛錬するよう語ります。行き詰まった人は、目の前の問題で頭も心もいっぱいになりがちです。テモテもいろいろなことに対処し、心があちこちに向いていたでしょう。</p>
-      <p>しかしパウロは、テモテに対してそのような問題の中にあっても、敬虔の心を大切にするようにと語りかけています。</p>
-      <p>この言葉から、パウロの関心がどのような問題の中にあっても、常に「敬虔」にあることが見えます。敬虔とは、神様を本当に偉大な方と認め、畏れをもって従う心の姿勢です。</p>
-      <p>モーセも行き止まりの海を前にして、心の中で焦って主に叫んでいました。しかし、杖を上げて手を海の上に差し伸ばすようにという主の言葉に従ったとき、海は分かれ、イスラエルは救われたのです。</p>
-      <p>神様の最も素晴らしい祝福は、従っていく先に開かれていきます。そして敬虔は、ほったらかしの信仰では身につきません。小さなことでも主に従うことに関心を持ち、チャレンジし続ける鍛錬が必要なのです。</p>
-      <h3 class="label2">生ける神に望みを置く</h3><p>パウロはこの歩みを、労苦し苦闘するものだと語りました。簡単な道ではありません。それでも励むのは、<strong>「生ける神に、望みを置いている」（4:10）</strong>からです。</p>
-      <p>私たちの信仰は、立派な道徳でも、うまく生きるための哲学でもありません。十字架にかかり、よみがえり、今も生きて働かれるイエス・キリストを信じる信仰です。この確信を忘れれば、信仰の歩みはただの自己研鑽・鍛錬であり、苦行になってしまいます。</p>
-      <p>私たちの神は生きておられる。生きて働かれる神こそが私たちの望み。</p>
-      <p>この望みを握りしめ、みことばに養われながら、敬虔の鍛錬に励む者でありたいと願います。</p>
+      <div class="scripture">あなたは、年が若いからといって、だれにも軽く見られないようにしなさい。むしろ、ことば、態度、愛、信仰、純潔において信者の模範となりなさい。<cite>Ⅰテモテ4:12</cite></div>
+      <h3 class="label2">外見</h3><p>YouTubeの人気動画に、アスリートが特殊メイクで足腰の悪いお年寄りに変身し、町の人々にドッキリを仕掛けるものがあります。「俺も仲間に入れてくれ」と頼むお年寄りは、若者たちに「危ないからダメだ」と断られます。しかし、頼み込まれ、しぶしぶ参加させた途端、老人は見たこともない動きでその場を圧倒し、皆が言葉を失うのです。極端な例ですが、外見で人を判断し軽んじ、見誤ることは、私たちの日常にも起こります。</p>
+      <h3 class="label2">テモテも…</h3><p>テモテもエペソ教会の中で軽んじられていました。当時の彼は40歳前後であったと考えられていますが、彼は長年パウロと宣教旅行を共にし、経験も豊富でした。それでも一部の年長者たちは、テモテの年齢や外見で彼を判断したのです。「人はうわべを見るが、主は心を見る」（Ⅰサムエル16:7）と言われますが、人はやはりうわべで人を判断する弱さがあります。</p>
+      <h3 class="label2">軽んじると、失うもの</h3><p>うわべだけで人を見ることは、その人を見誤るだけではありません。じつは霊的な恵みを損なうことにもつながります。</p>
+      <p>例えば、福音書では、ナザレの人々がイエス様の出自や外見を見て「大工の息子ではないか」と軽んじ、主をメシヤと信じれませんでしたが、その不信仰のゆえに、イエス様はそこで大きな御業をなさることができませんでした。私たちは、神様が立てられた人を軽んじ、退けるとき、神様がその人を通してなされる御業そのものを失うのです。</p>
+      <h3 class="label2">新しい働き人</h3><p>日本の教会は、牧師の高齢化が進み、新しい働き人が必要とされています。ですから、神様が新しい奉仕者を送られたとき、「あの若者、あるいは未経験者に、奉仕が務まるのか？」とうわべで判断せず、その人を押し出された神様を見つめ、その人を通してなされる神の恵みに期待し、祈り励ます教会でありたいと思います。</p>
+      <h3 class="label2">軽く見られるな</h3><p>ただ、パウロのメッセージの本筋は、「テモテを軽く見るな」との周りへの注意ではありません。「（テモテよ、）まず、あなた自身が人に軽く見られないよう、振る舞いに気をつけなさい」ということです。</p>
+      <p>私の想像ですが、テモテは優れた牧師でありながら、自分に自信が持てない弱さを抱えていたのではないでしょうか。私にも同じ弱さがありますが、「自信のない人」は、奉仕でも腰が引け、頼りなく映ります。パウロが、テモテに「与えられた賜物を軽んじてはならない」と繰り返し語るのも、そのためだったと思われます。</p>
+      <h3 class="label2">へりくだり傲慢</h3><p>「だれでもキリストのうちにあるなら、その人は新しく造られた者です」（Ⅱコリント5:17）。私たちは、救われたとき、単に罪の赦しと天国への切符をいただいただけではありません。内側に、賜物を持った新しい人をいただきました。</p>
+      <p>神様は、私たちを新しくし、足りない者、小さな者でさえ、生き生きと輝かせてくださる方です。それなのに「私は大した者ではない」と恐れ、何もしないのは、謙遜に見えて、神様の言葉より自分の価値観を優先する「へりくだり傲慢」です。</p>
+      <p>本当のへりくだりは、神様の言葉に従うことです。神様はへりくだる者を祝福してくださいます。「小さな私を用いてくださるというなら、その言葉を信じます」と、主の恵みを信頼し、胸を張って歩む者でありましょう。</p>
     </div>
     <p style="margin-top:22px"><a class="btn" style="display:block;text-align:center" href="https://note.com/betaniyanikki" target="_blank" rel="noopener">noteのトップページを開く</a></p>
   </section>
