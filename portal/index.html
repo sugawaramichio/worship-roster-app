@@ -163,6 +163,9 @@ button.hcard { display: block; width: 100%; font: inherit; color: inherit; text-
 .hcard .catch small { display: block; margin-top: 6px; font-size: 0.55em; font-weight: 500; color: var(--muted); line-height: 1.6; }
 .hcard .open::after { content: "›"; font-size: 1.6em; }
 .hcard:focus-visible { outline: 3px solid var(--deep); outline-offset: 2px; }
+/* 更新のお知らせ(NEW): 窓のボタンに data-updated="YYYY-MM-DD" を付けると、14日間、まだ開いていない人に出る */
+button.hcard { position: relative; }
+.hcard .newmark { position: absolute; bottom: 13px; right: 38px; z-index: 2; background: #d9480f; color: #fff; font-size: 0.8em; font-weight: 700; letter-spacing: 0.06em; line-height: 1; padding: 6px 10px 5px; border-radius: 999px; box-shadow: 0 1px 3px rgba(0,0,0,.18); pointer-events: none; }
 .back { font: inherit; font-weight: 700; font-size: 0.9em; min-height: 44px; margin-top: 18px; padding: 6px 18px; border-radius: 24px; border: 1.5px solid var(--deep); background: var(--paper); color: var(--deep); cursor: pointer; }
 
 /* 会計 */
@@ -346,7 +349,7 @@ html, body { overscroll-behavior-y: contain; }
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z" /><path d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4" /><path d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z" /><path d="M3 6v10c0 .888 .772 1.45 2 2" /><path d="M3 11c0 .888 .772 1.45 2 2" /></svg><span class="num">会計報告</span><span class="catch">2026年<small>覚えてお祈りください</small></span></span>
       <span class="open"><span></span></span>
     </button>
-    <button type="button" class="card hcard c2" data-go="mission">
+    <button type="button" class="card hcard c2" data-go="mission" data-updated="2026-11-24">
       <span class="cover"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/></svg><span class="num one">インドネシア<br>宣教</span><span class="catch">山中宣教師ファミリー<small>お祈りの課題</small></span></span>
       <span class="open"><span></span></span>
     </button>
@@ -754,41 +757,24 @@ html, body { overscroll-behavior-y: contain; }
     <figure class="photo"><img src="media/mission_img2.jpg" alt="山中宣教師ファミリー" loading="lazy"></figure>
     <div class="msg">
       <h2>山中宣教師ファミリー</h2>
-      <p class="label" style="margin-top:4px">最新のお便り(11月16日)</p>
-      <p class="label" style="margin-top:10px">① 突然のカラオケ店の騒音問題について</p>
-      <p>実はこの2週間ほど、新しくオープンした隣のカラオケ店の騒音に悩まされていました。</p>
-      <p>10月末、ジャカルタ旅行から帰宅した夜、これまで空き家だったはずの隣の建物から、突然夜間に、大音量のカラオケが聞こえてきました。私たちが旅行で留守にしている間に、新しくカラオケ店がオープンしていたのです。</p>
-      <p>店側の説明によると、「隣に人が住んでいるとは知らなかった」とのことでしたが、本来であれば営業を始める前に、せめて自治会長や近隣住民に確認していただきたかったと思いますが、そのような確認がなかったことを謝罪されていました。</p>
-      <p>この地域のカラオケ店は、日本のカラオケ店（防音設備があり、音が外に漏れない）とは大きく異なり、店のドアを全開にして、大音量で歌うスタイルです。</p>
-      <p>ひどい日には明け方まで騒音が続き、私たち家族の睡眠にも大きな支障が出ていました。<br>このままでは我慢にも限界があり、今後もここに住み続けることは難しいと感じるほどでした。</p>
-      <p>それで市の条例を調べてみると、シンカワンにも夜間の騒音など、近隣住民に迷惑を及ぼす行為を規制する条例があることが分かりました。</p>
-      <p>そこで、できる限り穏便に解決できるよう、私たちにできる対策を一つずつ進めることにしました。</p>
-      <p>まず、インドネシア人の友人たちに相談し、自治会長に対応をお願いしました。</p>
-      <p>しかし、なかなか改善が見られなかったため、次に政府の治安・秩序維持機関である「Satpol PP」に相談しました。</p>
-      <p>その後、Satpol PPが自治会長や私たちの友人たちと連携してくださり、カラオケ店側との話し合いが進められました。</p>
-      <p>そして昨晩、私たちの自宅にカラオケ店の関係者、自治会長、インドネシア人の友人たち、さらには地域のジャーナリスト（インドネシアの文化？）も集まり、話し合いが行われました。</p>
-      <p>その話し合いの中でカラオケ店側は、迷惑をかけているなら移転する気はあるが、すでに1年分の家賃を家主に支払っていることが分かり、そのためすぐに退去することは難しいという事情がありました。</p>
-      <p>そこで彼らは家主から、支払済みの家賃の70％に相当する金額を返金してもらうことを口頭で約束してもらい、その返金が約束どおり行われれば、１週間以内に別の場所へ移転するので、それまで営業させてほしい、との申し出がありました。</p>
-      <p>それがお互いにとって最も望ましい解決方法だと思い、最終的に1週間以内にカラオケ店が退去することを条件に、平和的に合意することができました。</p>
-      <p>Satpol PPなどの政府機関も関わり、自治会長や複数の立会人、ジャーナリストも同席した話し合いだったので、この約束がきちんと守られることを願っています。</p>
-      <p>とはいえ、ここはインドネシア。これまでにも、物事が二転三転することを何度も経験してきました。</p>
-      <p>今回の問題が、平和的かつ円満に解決するよう、ぜひお祈りください🙏</p>
-      <p class="label" style="margin-top:14px">お祈りください🙏</p>
-      <ol class="plain flow">
-        <li><b>1</b>家主からカラオケ店側へ、約束どおり家賃の70％が返金されるように。</li>
-        <li><b>2</b>カラオケ店側が約束を守り、1週間以内に円満に退去し、別の場所へ移転できるように。</li>
-        <li><b>3</b>今後、私たち家族が安心して眠り、平安のうちに生活できる環境が守られるように。</li>
-        <li><b>4</b>今回の問題を通して地域の方々との関係も良いものとされ、争いやトラブルが起こることなく解決へと導かれるように。</li>
-      </ol>
-      <p class="label" style="margin-top:14px">② 長尾いずみさんの帰国について</p>
-      <p>明日、教育サポーターとしてシンカワンでご奉仕してくださった長尾いずみさんが、帰国に向けてシンカワンを出発されます。</p>
-      <p>今年8月から子どもたちの教育を支えてくださり、私たち家族にとっても大きな助けとなりました。これまでのご奉仕に心から感謝しています。</p>
-      <p>どうぞ、帰国までの旅路が守られ、安全に日本へ到着できるようにお祈りください。</p>
-      <p>また、日本に戻られてからの新しい歩みや今後の働きも、主が豊かに導き、祝福してくださいますように🙏</p>
-      <p>引き続き、私たち家族とシンカワンでの働きのためにも、お祈りに覚えていただけたら感謝です。</p>
-      <figure class="photo" style="margin:14px 0 8px"><video controls playsinline preload="metadata" style="display:block;width:100%;height:auto" src="media/mission_video.mp4"></video></figure>
-      <p>↑<br>カラオケ店の様子。その左が我が家。<br><br>↓<br>昨晩の話し合いの様子。</p>
-      <figure class="photo" style="margin:8px 0"><img style="width:100%;height:auto;border-radius:12px" alt="昨晩の話し合いの様子" src="media/mission_img1.jpg" loading="lazy"></figure>
+      <p class="label" style="margin-top:4px">最新のお便り(11月24日)</p>
+      <p class="label" style="margin-top:10px">① カラオケ店の騒音問題について</p>
+      <p>お祈りいただいていた我が家の隣のカラオケ店の件ですが、その後、それまでの騒音が嘘のように静かになり、ゆっくり眠れるようになりました。</p>
+      <p>今朝は店の看板も取り外されていたので、約束通り、別の場所へ移転していただけそうです🙏</p>
+      <p>隣の方から何か言われたり、嫌がらせを受けたりすることもなく、周りの方々の協力もあって平和的に解決できたことを、心から感謝しています。</p>
+      <p>お祈りくださった皆様、本当にありがとうございました！</p>
+      <p style="margin-top:14px">② 教育サポーターとして3ヶ月間、子どもたちのためにご奉仕してくださった長尾いずみさんは、無事に日本へ帰国されました🙏</p>
+      <p>これまでのご奉仕を心から感謝いたします。送り出してくださったJEC国分福音教会の皆様、ご家族皆様、ありがとうございました🙇</p>
+      <p class="label" style="margin-top:14px">③ 子どもたちの教育サポーターについて</p>
+      <p>12月19日〜1月7日まで、子どもたちの教育サポーターとして、インドネシア・チカラン在住の野原とおこさんが来てくださることになりました。</p>
+      <p>野原さんは現在、インターナショナルスクールで教師として働いておられ、今回は学校の休暇を使って来てくださいます。</p>
+      <p>昨年、お母様と一緒に旅行でシンカワンを訪れてくださり、その際には子どもたちとたくさん遊んでくださいました。子どもたちも大喜びでした。</p>
+      <p>私たちよりもインドネシアでの生活が長い野原さんが、こうして短期間でも来てくださることを、本当に嬉しく思っています。</p>
+      <p>滞在中の働きや、子どもたちとの関わりが祝福されたものとなるよう、どうぞお祈りください🙏</p>
+      <p style="margin-top:14px">写真<br>①②：昨年野原さんが来られた時<br>③：長尾いずみさんとのお別れ</p>
+      <figure class="photo" style="margin:8px 0"><img style="width:100%;height:auto;border-radius:12px" alt="写真①" src="media/mission_img1.jpg" loading="lazy"></figure>
+      <figure class="photo" style="margin:8px 0"><img style="width:100%;height:auto;border-radius:12px" alt="写真②" src="media/mission_img2.jpg" loading="lazy"></figure>
+      <figure class="photo" style="margin:8px 0"><img style="width:100%;height:auto;border-radius:12px" alt="写真③" src="media/mission_img3.jpg" loading="lazy"></figure>
     </div>
   </section>
 
@@ -909,6 +895,30 @@ html, body { overscroll-behavior-y: contain; }
     else { ptr.style.transform = "translate(-50%, -60px)"; }
     y0 = null; dy = 0;
   }, { passive: true });
+})();
+</script>
+<script>
+/* ---- 更新のお知らせ(NEW) ---- */
+(function () {
+  var DAYS = 14, KEY = "portal-seen";
+  var seen = {};
+  try { seen = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
+  var today = new Date();
+  document.querySelectorAll("button.hcard[data-updated]").forEach(function (b) {
+    var up = b.getAttribute("data-updated"), go = b.dataset.go;
+    var d = new Date(up + "T00:00:00");
+    if (isNaN(d) || (today - d) / 86400000 > DAYS) return;
+    if (seen[go] && seen[go] >= up) return;
+    var m = document.createElement("span");
+    m.className = "newmark"; m.textContent = "NEW";
+    m.setAttribute("aria-label", "更新されました");
+    b.appendChild(m);
+    b.addEventListener("click", function () {
+      seen[go] = up;
+      try { localStorage.setItem(KEY, JSON.stringify(seen)); } catch (e) {}
+      if (m.parentNode) m.parentNode.removeChild(m);
+    });
+  });
 })();
 </script>
 
